@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/google_in_app_purchase.dart';
-
 class SkinViewState {
   var dataList = [
     {
@@ -166,11 +164,4 @@ class SkinViewState {
   // BannerAd? bannerAd = null;
 
   late final TabController tabController;
-
-  late GoogleInAppPurchase appPurchase;
-  var isRestore = false;
-
-  SkinViewState() {
-    appPurchase = GoogleInAppPurchase();
-  }
 }
