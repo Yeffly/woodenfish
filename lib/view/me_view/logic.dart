@@ -3,7 +3,6 @@ import 'package:woodenfish/common/application.dart';
 import 'package:woodenfish/common/constant.dart';
 
 import '../../network/http_utils.dart';
-import '../../utils/pub_method.dart';
 import 'state.dart';
 
 class MeViewLogic extends GetxController {
@@ -14,7 +13,7 @@ class MeViewLogic extends GetxController {
     super.onReady();
     if (!Application.getStorage.hasData(Constant.isInAppReviewKey)) {
       Future.delayed(const Duration(milliseconds: 1000 * 10), () {
-        PubMethodUtils.getInAppReview();
+        // PubMethodUtils.getInAppReview();
         Application.getStorage.write(Constant.isInAppReviewKey, false);
       });
     }
