@@ -3,11 +3,10 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {url 'https://developer.huawei.com/repo/'}
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.4'
+        classpath "com.android.tools.build:gradle:7.4.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -17,12 +16,18 @@ allprojects {
         google()
         mavenCentral()
     }
-    // ========== 新增这段 ==========
-    afterEvaluate { project ->
-        if (project.hasProperty('android') && !project.android.hasProperty('namespace')) {
-            project.android.namespace = project.group
-        }
-    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
 }
 
 rootProject.buildDir = '../build'
