@@ -54,3 +54,5 @@ flutter:
 
 flutter_intl:
   enabled: true
+dependency_overrides:
+  flutter_spinkit: ^5.2.1
