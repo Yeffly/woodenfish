@@ -69,8 +69,8 @@ class SkinViewLogic extends GetxController with SingleGetTickerProviderMixin {
         state.isRestore = value;
         update();
       });
-      state.appPurchase.loadProducts();
-      initSkinLockList();
+      //state.appPurchase.loadProducts();
+     // initSkinLockList();
       // MethodPlugin.isGoogleChannel().then((value) {
       //   if (!value) {
       //     state.isSkinLockState = [
@@ -100,10 +100,10 @@ class SkinViewLogic extends GetxController with SingleGetTickerProviderMixin {
       //     initSkinLockList();
       //   }
       // });
-    } else {
-      initSkinLockList();
-      state.appPurchase.loadProducts();
-    }
+   // } else {
+     // initSkinLockList();
+     // state.appPurchase.loadProducts();
+   // }
   }
 
   @override
@@ -111,7 +111,7 @@ class SkinViewLogic extends GetxController with SingleGetTickerProviderMixin {
     super.onClose();
     // state.bannerAd?.dispose();
     state.tabController.dispose();
-    state.appPurchase.dispose();
+    // state.appPurchase.dispose();
   }
 
   void initSkinLockList() {
@@ -145,8 +145,8 @@ class SkinViewLogic extends GetxController with SingleGetTickerProviderMixin {
       if (index != 0) {
         ToastUtil.showProgress(Get.context!);
         state.skinSelectIndex = index;
-        state.appPurchase
-            .startPurchase(state.appPurchase.products?[index - 1].id ?? "");
+        // state.appPurchase
+        //     .startPurchase(state.appPurchase.products?[index - 1].id ?? "");
       }
     }
   }
@@ -170,8 +170,8 @@ class SkinViewLogic extends GetxController with SingleGetTickerProviderMixin {
       if (index != 0) {
         ToastUtil.showProgress(Get.context!);
         state.prayerBeadsSkinSelectIndex = index;
-        state.appPurchase
-            .startPurchase(state.appPurchase.products?[index - 1].id ?? "");
+        // state.appPurchase
+        //     .startPurchase(state.appPurchase.products?[index - 1].id ?? "");
       }
     }
   }
