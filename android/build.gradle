@@ -16,7 +16,12 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven {url 'https://developer.huawei.com/repo/'}
+    }
+    // ========== 新增这段 ==========
+    afterEvaluate { project ->
+        if (project.hasProperty('android') && !project.android.hasProperty('namespace')) {
+            project.android.namespace = project.group
+        }
     }
 }
 
