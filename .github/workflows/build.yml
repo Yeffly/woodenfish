@@ -27,16 +27,13 @@ jobs:
           echo "PUB_HOSTED_URL=https://pub.flutter-io.cn" >> $GITHUB_ENV
           echo "FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn" >> $GITHUB_ENV
 
-      - name: 查看Dart版本
-        run: dart --version
-
       - name: 安装依赖
         run: flutter pub get
 
-      - name: 编译Release APK（不签名）
-        run: flutter build apk --release --no-shrink
+      - name: 编译APK，全局注入namespace参数
+        run: flutter build apk --release --no-shrink --dart-define=android.namespace=auto
 
-      - name: 上传APK产物
+      - name: 上传产物
         uses: actions/upload-artifact@v4
         with:
           name: woodenfish-apk
