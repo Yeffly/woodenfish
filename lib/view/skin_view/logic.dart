@@ -64,46 +64,14 @@ class SkinViewLogic extends GetxController with SingleGetTickerProviderMixin {
           break;
       }
     });
-    if (PlatformUtils.isAndroid) {
-      MethodPlugin.isGoogleChannel().then((value) {
-        state.isRestore = value;
-        update();
-      });
-      //state.appPurchase.loadProducts();
-     // initSkinLockList();
-      // MethodPlugin.isGoogleChannel().then((value) {
-      //   if (!value) {
-      //     state.isSkinLockState = [
-      //       false,
-      //       false,
-      //       false,
-      //       false,
-      //       false,
-      //       false,
-      //       false,
-      //       false,
-      //     ];
-      //     var siknNames = S
-      //         .of(Get.context!)
-      //         .siknNames
-      //         .split(',')
-      //         .map((e) => e.trim())
-      //         .toList();
-      //     for (int i = 0; i < state.dataList.length; i++) {
-      //       var item = state.dataList[i];
-      //       item['title'] = siknNames[i];
-      //       item['isLock'] = false;
-      //     }
-      //     update();
-      //   } else {
-      //     state.appPurchase.loadProducts();
-      //     initSkinLockList();
-      //   }
-      // });
-   // } else {
-     // initSkinLockList();
-     // state.appPurchase.loadProducts();
-   // }
+
+    // 注释谷歌渠道判断
+    // if (PlatformUtils.isAndroid) {
+    //   MethodPlugin.isGoogleChannel().then((value) {
+    //     state.isRestore = value;
+    //     update();
+    //   });
+    // }
   }
 
   @override
@@ -111,7 +79,6 @@ class SkinViewLogic extends GetxController with SingleGetTickerProviderMixin {
     super.onClose();
     // state.bannerAd?.dispose();
     state.tabController.dispose();
-    // state.appPurchase.dispose();
   }
 
   void initSkinLockList() {
@@ -139,14 +106,11 @@ class SkinViewLogic extends GetxController with SingleGetTickerProviderMixin {
       state.skinIndex = index;
       Application.getStorage.write(Constant.skinKey, index);
       EventBus.getDefault().post(Constant.skinKey);
-      // Get.find<HomeViewLogic>().onChangeIndex(0);
       update();
     } else {
       if (index != 0) {
         ToastUtil.showProgress(Get.context!);
         state.skinSelectIndex = index;
-        // state.appPurchase
-        //     .startPurchase(state.appPurchase.products?[index - 1].id ?? "");
       }
     }
   }
@@ -170,8 +134,6 @@ class SkinViewLogic extends GetxController with SingleGetTickerProviderMixin {
       if (index != 0) {
         ToastUtil.showProgress(Get.context!);
         state.prayerBeadsSkinSelectIndex = index;
-        // state.appPurchase
-        //     .startPurchase(state.appPurchase.products?[index - 1].id ?? "");
       }
     }
   }
