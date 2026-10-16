@@ -135,7 +135,8 @@ android {
 }
 configurations.all {
     resolutionStrategy {
-        force "androidx.webkit:webkit:1.9.0"
+        force "androidx.webkit:webkit:1.6.0"
+        force "io.flutter.plugins.webviewflutter:webview-flutter-android:4.2.2"
     }
 }
 flutter {
