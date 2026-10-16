@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:woodenfish/view/me_view/view.dart';
 
 import '../../generated/l10n.dart';
-import '../../utils/google_in_app_purchase.dart';
 import '../../widgets/keep_alive_page.dart';
 import '../main_view/view.dart';
 import '../prayer_beads_view/view.dart';
