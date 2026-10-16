@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.Uri
-import com.umeng.commonsdk.UMConfigure
 import com.xhx.woodenfish.AppInfo.getAppChannelId
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -24,11 +23,11 @@ class MethodPlugin : MethodChannel.MethodCallHandler, FlutterPlugin, ActivityAwa
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         if (flutterResult == null) {
-            flutterResult == result
+            flutterResult = result // 修复原代码bug：== 改成 =
         }
         when (call.method) {
             "isAgree" -> {
-                UMConfigure.submitPolicyGrantResult(activity, true)
+                // 移除友盟UMConfigure.submitPolicyGrantResult，直接返回成功
                 result.success("isAgree")
             }
 
