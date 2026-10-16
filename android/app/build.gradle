@@ -135,7 +135,7 @@ android {
 }
 configurations.all {
     resolutionStrategy {
-        force "androidx.webkit:webkit:1.10.0"
+        force "androidx.webkit:webkit:1.9.0"
     }
 }
 flutter {
