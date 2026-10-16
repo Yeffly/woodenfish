@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:woodenfish/utils/pub_method.dart';
 
 import '../../common/application.dart';
 import '../../common/constant.dart';
@@ -159,7 +158,7 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     }
     state.isAgree = Application.getStorage.read(Constant.isAgree) ?? false;
     if (state.isAgree) {
-      PubMethodUtils.umengCommonSdkInit();
+      // PubMethodUtils.umengCommonSdkInit();
       // String? deviceId = await PlatformDeviceId.getDeviceId;
       // if (deviceId != null && deviceId.isNotEmpty) {
       //
@@ -332,7 +331,7 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
                         onTap: () {
                           Application.getStorage.write(Constant.isAgree, true);
                           state.isAgree = true;
-                          PubMethodUtils.umengCommonSdkInit();
+                          // PubMethodUtils.umengCommonSdkInit();
                           getData();
                           Navigator.of(context, rootNavigator: true).pop();
                         },
