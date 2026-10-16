@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:woodenfish/plugin/method_plugin.dart';
 import 'package:woodenfish/utils/toast_util.dart';
-import 'package:in_app_review/in_app_review.dart';
 
 import 'platform_utils.dart';
 import 'trie_note.dart';
