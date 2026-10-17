@@ -43,12 +43,6 @@ class SkinViewState {
       "isLock": false,
       "price": '',
       "title": "圣诞木鱼",
-    },
-    {
-      "bg": "jw.png",
-      "isLock": false,
-      "price": '',
-      "title": "狮子头木鱼",
     }
   ];
 
