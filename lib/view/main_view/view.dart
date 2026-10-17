@@ -31,7 +31,7 @@ class MainViewPage extends StatelessWidget {
     });
   }
 
-  widgetGongDeNumber() {
+  Widget widgetGongDeNumber() {
     return Positioned(
       right: 0,
       left: 0,
@@ -97,7 +97,7 @@ class MainViewPage extends StatelessWidget {
             ])));
   }
 
-  widgetGongde() {
+  Widget widgetGongde() {
     return Positioned(
         top: state.top,
         left: state.left,
@@ -127,7 +127,7 @@ class MainViewPage extends StatelessWidget {
         ));
   }
 
-  leftTopMenu() {
+  Widget leftTopMenu() {
     return Positioned(
       top: Get.statusBarHeight,
       left: 20.w,
@@ -149,7 +149,6 @@ class MainViewPage extends StatelessWidget {
               logic.vibrateOpen();
             },
             child: Icon(
-              // ✅ 修复振动图标：振动开启显示手机图标，关闭显示擦除
               state.isVibrate ? Icons.phone_iphone_outlined : Icons.phonelink_erase_outlined,
               size: 50.w,
               color: Colors.white,
@@ -160,7 +159,7 @@ class MainViewPage extends StatelessWidget {
     );
   }
 
-  widgetProgss() {
+  Widget widgetProgss() {
     return Positioned(
       top: 100.h,
       child: Column(
@@ -179,7 +178,7 @@ class MainViewPage extends StatelessWidget {
                 ),
               ),
               InkWell(
-                onTap: () => {logic.jufuClick()},
+                onTap: () => logic.jufuClick(),
                 child: Text(
                   "集福",
                   style: TextStyle(
