@@ -5,7 +5,6 @@ import 'package:woodenfish/view/me_view/view.dart';
 import '../../generated/l10n.dart';
 import '../../widgets/keep_alive_page.dart';
 import '../main_view/view.dart';
-import '../prayer_beads_view/view.dart';
 import '../skin_view/view.dart';
 
 class HomeViewState {
@@ -21,7 +20,6 @@ class HomeViewState {
   HomeViewState() {
     pageList = [
       KeepAlivePage(MainViewPage()),
-      KeepAlivePage(PrayerBeadsViewPage()),
       KeepAlivePage(SkinViewPage()),
       KeepAlivePage(MeViewPage()),
     ];
@@ -29,13 +27,6 @@ class HomeViewState {
       NavigationDestination(
         icon: Icon(Icons.home),
         label: S.of(Get.context!).home,
-      ),
-      NavigationDestination(
-        icon: Image(
-          image: AssetImage("assets/images/fz-s.png"),
-          width: 24.0,
-        ),
-        label: S.of(Get.context!).prayerBeads,
       ),
       NavigationDestination(
         icon: Icon(Icons.heart_broken_rounded),
