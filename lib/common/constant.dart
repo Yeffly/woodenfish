@@ -10,6 +10,7 @@ class Constant {
   static const String isInAppReviewKey = "isInAppReviewKey";
   static const String fuKey = "fu_key";
   static const String toneColourKey = "tone_colour_key";
+  static const String bgSoundKey = "bg_sound_key"; // 新增：背景配乐持久化key
   static const String intervalTimeKey = "interval_time_key";
   static const String autoKnockKey = "auto_knock_key";
   static const String suspendedKey = "suspended_key";
@@ -48,13 +49,22 @@ class Constant {
     "fr.png",
   ];
 
-  // 改为5个本地音色，顺序：01 02 03 04 05
+  // 改为5个本地敲击音色，顺序：01 02 03 04 05
   static const List<String> toneColour = [
     "01",
     "02",
     "03",
     "04",
     "05",
+  ];
+
+  // 新增：5个背景BGM列表，和敲击音色数量保持一致
+  static const List<String> bgMusicList = [
+    "bg01",
+    "bg02",
+    "bg03",
+    "bg04",
+    "bg05",
   ];
 
   static const muyuList = [
@@ -160,6 +170,4 @@ class Constant {
       "title": "人生巅峰1",
     },
   ];
-
-  var stage = [200, 500, 800, 1000];
 }
