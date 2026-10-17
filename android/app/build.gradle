@@ -60,7 +60,9 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
-
+        aaptOptions {
+        noCompress "wav", "mp3"
+        }
         flavorDimensions "versionCode"
     }
 
