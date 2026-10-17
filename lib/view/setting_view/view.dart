@@ -210,10 +210,9 @@ class SettingViewPage extends StatelessWidget {
                         inactiveColor: const Color(0xFF383838),
                         thumbColor: Colors.amber,
                         value: state.intervalTime,
-                        // 拖动过程：只更新UI显示，不保存、不启动定时器
+                        // 拖动过程：只修改state预览值，删掉错误的update()
                         onChanged: (double val) {
                           state.intervalTime = val;
-                          update();
                         },
                         // 松手结束拖动，才执行保存+重启定时器
                         onChangeEnd: (double val) {
