@@ -38,15 +38,5 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
-<!--        <meta-data-->
-<!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
-<!--            android:value="ca-app-pub-6237326926737313~9603343762"/>-->
-
-<!--        <meta-data-->
-<!--            android:name="UMENG_APPKEY"-->
-<!--            android:value="63b91145ba6a5259c4e3e8b6" />-->
-<!--        <meta-data-->
-<!--            android:name="UMENG_CHANNEL"-->
-<!--            android:value="${UMENG_CHANNEL_VALUE}" />-->
     </application>
 </manifest>
