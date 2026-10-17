@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import '../../common/constant.dart';
-import '../../widgets/snowflake_painter.dart';
 
 class MainViewState {
   int count = 0;
@@ -17,7 +16,6 @@ class MainViewState {
   double intervalTime = 1;
   Timer? timer;
   bool isAgree = false;
-  bool snowflakeValue = true;
 
   late AudioPlayer audioPlayer;
   late AudioPlayer musicPlayer;
@@ -34,7 +32,6 @@ class MainViewState {
   var stagePosition = 0;
   var shareFuImage;
 
-  final List<SnowSlake> snowflakes = List.generate(50, (index) => SnowSlake());
 
   MainViewState() {
     audioPlayer = AudioPlayer();
