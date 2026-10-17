@@ -50,29 +50,10 @@ class MeViewPage extends StatelessWidget {
                     height: 300.w,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                  ), // 图片路径或网络地址
+                  ),
                 ),
               ),
               SizedBox(height: 30.w),
-              // TextButton.icon(
-              //   style: ButtonStyle(
-              //       textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white70)),
-              //       alignment: Alignment.centerLeft,
-              //       minimumSize: MaterialStateProperty.all(const Size(200, 50))),
-              //   icon: const Icon(
-              //     Icons.card_membership,
-              //     color: Colors.white70, //for icon color
-              //   ),
-              //   label: Text(
-              //     S.of(context).setting,
-              //     style: const TextStyle(
-              //       color: Colors.white70, //for text color
-              //     ),
-              //   ),
-              //   onPressed: () {
-              //     Get.toNamed(RouteConfig.vip);
-              //   },
-              // ),
               TextButton.icon(
                 style: ButtonStyle(
                     textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white70)),
@@ -80,12 +61,12 @@ class MeViewPage extends StatelessWidget {
                     minimumSize: MaterialStateProperty.all(const Size(200, 50))),
                 icon: const Icon(
                   Icons.settings,
-                  color: Colors.white70, //for icon color
+                  color: Colors.white70,
                 ),
                 label: Text(
                   S.of(context).setting,
                   style: const TextStyle(
-                    color: Colors.white70, //for text color
+                    color: Colors.white70,
                   ),
                 ),
                 onPressed: () {
@@ -98,95 +79,16 @@ class MeViewPage extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     minimumSize: MaterialStateProperty.all(const Size(200, 50))),
                 icon: const Icon(
-                  Icons.account_box_outlined,
-                  color: Colors.white70, //for icon color
-                ),
-                label: Text(
-                  S.of(context).privacyPolicy,
-                  style: const TextStyle(
-                    color: Colors.white70, //for text color
-                  ),
-                ),
-                onPressed: () {
-                  Constant.isClickAgreement = false;
-                  Get.toNamed('${RouteConfig.webPage}?title=${S.of(context).privacyPolicy}&url=${Constant.privacyUrl}');
-                },
-              ),
-              TextButton.icon(
-                style: ButtonStyle(
-                    textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white70)),
-                    alignment: Alignment.centerLeft,
-                    minimumSize: MaterialStateProperty.all(const Size(200, 50))),
-                icon: const Icon(
-                  Icons.privacy_tip,
-                  color: Colors.white70, //for icon color
-                ),
-                label: Text(
-                  S.of(context).termsUse,
-                  style: const TextStyle(
-                    color: Colors.white70, //for text color
-                  ),
-                ),
-                onPressed: () {
-                  Constant.isClickAgreement = false;
-                  Get.toNamed('${RouteConfig.webPage}?title=${S.of(context).termsUse}&url=${Constant.termsUseUrl}');
-                },
-              ),
-              TextButton.icon(
-                style: ButtonStyle(
-                    textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white70)),
-                    alignment: Alignment.centerLeft,
-                    minimumSize: MaterialStateProperty.all(const Size(200, 50))),
-                icon: const Icon(
-                  Icons.score,
+                  Icons.integration_instructions,
                   color: Colors.white70,
                 ),
                 label: Text(
-                  S.of(context).givePraise,
+                  S.of(context).wfIntroduction,
                   style: const TextStyle(
                     color: Colors.white70,
                   ),
                 ),
                 onPressed: () {
-                  MethodPlugin.sikpPlay();
-                },
-              ),
-              TextButton.icon(
-                style: ButtonStyle(
-                    textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white70)),
-                    alignment: Alignment.centerLeft,
-                    minimumSize: MaterialStateProperty.all(const Size(200, 50))),
-                icon: const Icon(
-                  Icons.deck_rounded,
-                  color: Colors.white70, //for icon color
-                ),
-                label: Text(
-                  S.of(context).aboutUs,
-                  style: const TextStyle(
-                    color: Colors.white70, //for text color
-                  ),
-                ),
-                onPressed: () {
-                  Get.toNamed(RouteConfig.about);
-                },
-              ),
-              TextButton.icon(
-                style: ButtonStyle(
-                    textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white70)),
-                    alignment: Alignment.centerLeft,
-                    minimumSize: MaterialStateProperty.all(const Size(200, 50))),
-                icon: const Icon(
-                  Icons.integration_instructions,
-                  color: Colors.white70, //for icon color
-                ),
-                label: Text(
-                  S.of(context).wfIntroduction,
-                  style: const TextStyle(
-                    color: Colors.white70, //for text color
-                  ),
-                ),
-                onPressed: () {
-                  // logic.getData();
                   Get.toNamed(RouteConfig.introduction);
                 },
               )
