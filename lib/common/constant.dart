@@ -9,13 +9,13 @@ class Constant {
   static const String isSkinLockKey = "isSkinLockKey";
   static const String fuKey = "fu_key";
   static const String toneColourKey = "tone_colour_key";
-  static const String bgSoundKey = "bg_sound_key"; // 🔴全局固定：背景音存储key，所有页面统一读这个
+  static const String bgSoundKey = "bg_sound_key";
   static const String intervalTimeKey = "interval_time_key";
   static const String autoKnockKey = "auto_knock_key";
   static const String suspendedKey = "suspended_key";
   static const String stagePositionKey = "stage_position_key";
 
-  static const dataList = [
+  static const List<String> dataList = [
     "hd.png",
     "h8.png",
     "hg.png",
@@ -26,7 +26,7 @@ class Constant {
     "jw.png"
   ];
 
-  static const prayerBeadsList = [
+  static const List<String> prayerBeadsList = [
     "fc.png",
     "fe.png",
     "ff.png",
@@ -35,7 +35,7 @@ class Constant {
     "fz-3.png",
   ];
 
-  static const fuWenList = [
+  static const List<String> fuWenList = [
     "fi.png",
     "fk.png",
     "fm.png",
@@ -66,7 +66,7 @@ class Constant {
     "bg05",
   ];
 
-  static const muyuList = [
+  static const List<Map<String,dynamic>> muyuList = [
     {
       "bg": "hd.png",
       "isLock": false,
@@ -117,7 +117,7 @@ class Constant {
     }
   ];
 
-  static const fuList = [
+  static const List<Map<String,dynamic>> fuList = [
     {
       "bg": "fi.png",
       "isLock": true,
