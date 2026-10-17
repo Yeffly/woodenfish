@@ -149,7 +149,8 @@ class MainViewPage extends StatelessWidget {
               logic.vibrateOpen();
             },
             child: Icon(
-              state.isVibrate ? Icons.phonelink_erase_outlined : Icons.phone_iphone_outlined,
+              // ✅ 修复振动图标：振动开启显示手机图标，关闭显示擦除
+              state.isVibrate ? Icons.phone_iphone_outlined : Icons.phonelink_erase_outlined,
               size: 50.w,
               color: Colors.white,
             ),
