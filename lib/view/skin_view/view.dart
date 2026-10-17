@@ -37,16 +37,14 @@ class SkinViewPage extends StatelessWidget {
               dividerColor: Colors.transparent,
               indicatorColor: Colors.amber,
               labelColor: Colors.amber,
-              tabs: <Widget>[Tab(text: S.of(context).skin), Tab(text: S.of(context).prayerBeads), Tab(text: S.of(context).fu)],
+              tabs: <Widget>[Tab(text: S.of(context).skin), Tab(text: S.of(context).fu)],
             ),
           ),
           body: TabBarView(
             controller: state.tabController,
             children: [
               tabWidget1(logic),
-              tabWidget2(),
               tabWidget3(),
-              // Container(),
             ],
           ),
         );
@@ -102,67 +100,6 @@ class SkinViewPage extends StatelessWidget {
                   //     ),
                   //   ),
                   // )
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  GridView tabWidget2() {
-    return GridView.builder(
-        itemCount: state.prayerBeadsList.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // 每行/列的网格数量
-            mainAxisSpacing: 2.w, // 主轴方向的间距
-            crossAxisSpacing: 2.w, // 交叉轴方向的间距
-            mainAxisExtent: 300.w),
-        itemBuilder: (context, index) {
-          var item = state.prayerBeadsList[index];
-          return InkWell(
-            onTap: () {
-              logic.prayerBeadsPurchase(index);
-            },
-            child: Card(
-              elevation: 1,
-              clipBehavior: Clip.hardEdge,
-              color: state.prayerBeadsSkinIndex == index ? Colors.white10 : Colors.black12,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image(
-                        image: AssetImage("assets/images/${item['bg']}"),
-                        width: 150.w,
-                        height: 150.w,
-                        fit: BoxFit.fill,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          item['title'].toString(),
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                      // Text(item['price'].toString()),
-                    ],
-                  ),
-                  Visibility(
-                    visible: item['isLock'] as bool,
-                    child: Positioned(
-                      top: 10.w,
-                      right: 10.w,
-                      child: Icon(
-                        Icons.lock,
-                        color: Colors.amber,
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
