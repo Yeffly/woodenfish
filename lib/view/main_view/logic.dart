@@ -31,15 +31,12 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
   late Animation<Offset> floatTextTransitionAnimation;
   late AnimationController floatTextTransitionController;
 
-  late AnimationController snowflakeController;
-
   late AnimationController jiFuController;
 
   @override
   void onInit() {
     super.onInit();
     jiFuController = AnimationController(vsync: this);
-    snowflakeController = AnimationController(vsync: this, duration: const Duration(seconds: 1))..repeat();
     fuController = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     fuAnimation = Tween(begin: 0.0, end: 1.0).animate(fuController);
     fuAnimation.addStatusListener((status) {
@@ -102,9 +99,6 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
           break;
         case Constant.suspendedKey:
           state.suspendedText = read;
-          break;
-        case Constant.snowflakeKey:
-          state.snowflakeValue = read;
           break;
         case Constant.fuKey:
           state.fuWnImage = Constant.fuWenList[read];
@@ -187,12 +181,10 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     state.audioPlayer.play(UrlSource(Constant.resourceUrl + state.toneColour), volume: 1.0).then((value) async {
       state.count += 1;
       Application.getStorage.write(Constant.countKey, state.count);
-      // fuController.forward();
       fishSkinController.forward();
       waterController.forward();
       floatTextController.forward();
       floatTextTransitionController.forward();
-      // state.animatedRandoms = Random().nextInt(10 - 0) + 0;
       var random = Random();
       state.top = random.nextInt(230 - 200) + 200;
       state.left = random.nextInt(Get.width.toInt() - 50).toDouble();
@@ -205,8 +197,6 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
         jiFuController.reverse();
       }
     });
-    // state.fuWnImage = Constant.fuWenList.elementAt(Random().nextInt(5));
-
     update();
   }
 
@@ -244,7 +234,7 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     waterController.dispose();
     floatTextController.dispose();
     floatTextTransitionController.dispose();
-    snowflakeController.dispose();
+    jiFuController.dispose();
     super.onClose();
   }
 
