@@ -165,6 +165,7 @@ class SettingViewPage extends StatelessWidget {
                 SizedBox(height: 18.h),
 
                 // ========== 自动敲击 卡片 ==========
+               // ========== 自动敲击 卡片 ==========
                 buildCard(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,7 +189,6 @@ class SettingViewPage extends StatelessWidget {
                         style: TextStyle(color: Colors.white70, fontSize: 14.sp),
                       ),
                       SizedBox(height: 6.h),
-                      // ===================== Slider【完全原样保留你原来的代码，只改颜色外观，不动回调逻辑！！】 =====================
                       Slider(
                         min: 1,
                         max: 10,
@@ -198,6 +198,7 @@ class SettingViewPage extends StatelessWidget {
                         value: state.intervalTime,
                         onChanged: (double val) {
                           state.intervalTime = val;
+                          logic.update();
                         },
                         onChangeEnd: (double val) {
                           logic.onIntervalChange(val);
