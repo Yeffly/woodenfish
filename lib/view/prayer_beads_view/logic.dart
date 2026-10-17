@@ -7,7 +7,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get/get.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../common/application.dart';
 import '../../generated/l10n.dart';
@@ -164,115 +163,75 @@ class PrayerBeadsViewLogic extends GetxController
   }
 
   showFu() {
-    return showGeneralDialog(
-        context: Get.context!,
-        barrierDismissible: false,
-        barrierLabel: '',
-        transitionDuration: Duration(milliseconds: 400),
-        pageBuilder: (BuildContext context, Animation<double> animation,
-            Animation<double> secondaryAnimation) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 400.w,
-                constraints: BoxConstraints(minHeight: 720.w, maxHeight: 800.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image(
-                      image: AssetImage("assets/images/${state.shareFuImage}"),
-                      fit: BoxFit.contain,
-                      height: 600.w,
-                    )
-                        .animate(adapter: ValueAdapter(0.5))
-                        .shimmer(
-                          colors: [
-                            const Color(0xFFFFFF00),
-                            const Color(0xFF00FF00),
-                            const Color(0xFF00FFFF),
-                            const Color(0xFF0033FF),
-                            const Color(0xFFFF00FF),
-                            const Color(0xFFFF0000),
-                            const Color(0xFFFFFF00),
-                          ],
-                        )
-                        .animate(
-                            onPlay: (controller) =>
-                                controller.repeat(reverse: true))
-                        .saturate(
-                            delay: Duration(seconds: 1),
-                            duration: Duration(seconds: 2))
-                        .then()
-                        .fadeOut()
-                        .animate()
-                        .effect(duration: 3000.ms)
-                        .effect(delay: 750.ms, duration: 1000.ms)
-                        .slideX(begin: 1)
-                        .flipH(begin: -1, alignment: Alignment.centerRight)
-                        .scaleXY(begin: 0.75, curve: Curves.easeInOutQuad)
-                        .untint(begin: 0.6),
-                    SizedBox(height: 20.w),
-                    ElevatedButton(
-                      onPressed: () async {
-                        final image = await rootBundle
-                            .load('assets/images/${state.shareFuImage}');
-                        final buffer = image.buffer;
-                        Share.shareXFiles(
-                          [
-                            XFile.fromData(
-                              buffer.asUint8List(
-                                image.offsetInBytes,
-                                image.lengthInBytes,
-                              ),
-                              name: 'Photo.png',
-                              mimeType: 'image/png',
-                            ),
-                          ],
-                          text: S.of(Get.context!).shareTxt,
-                        );
-                      },
-                      child: Text(
-                        S.of(Get.context!).shareTxt,
-                        style: TextStyle(
-                          fontSize: 28.sp,
-                          color: Colors.white,
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blue),
-                        minimumSize: MaterialStateProperty.all(Size(130, 40)),
-                        elevation: MaterialStateProperty.all(0),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+  return showGeneralDialog(
+      context: Get.context!,
+      barrierDismissible: false,
+      barrierLabel: '',
+      transitionDuration: Duration(milliseconds: 400),
+      pageBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 400.w,
+              constraints: BoxConstraints(minHeight: 720.w, maxHeight: 800.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
               ),
-              SizedBox(height: 20.w),
-              GestureDetector(
-                onTap: () {
-                  Get.back();
-                },
-                child: Image(
-                  image: AssetImage("assets/images/ic_close.png"),
-                  fit: BoxFit.contain,
-                  height: 64.w,
-                  width: 64.w,
-                ),
-              )
-            ],
-          );
-        });
-  }
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image(
+                    image: AssetImage("assets/images/${state.shareFuImage}"),
+                    fit: BoxFit.contain,
+                    height: 600.w,
+                  )
+                      .animate(adapter: ValueAdapter(0.5))
+                      .shimmer(
+                        colors: [
+                          const Color(0xFFFFFF00),
+                          const Color(0xFF00FF00),
+                          const Color(0xFF00FFFF),
+                          const Color(0xFF0033FF),
+                          const Color(0xFFFF00FF),
+                          const Color(0xFFFF0000),
+                          const Color(0xFFFFFF00),
+                        ],
+                      )
+                      .animate(
+                          onPlay: (controller) =>
+                              controller.repeat(reverse: true))
+                      .saturate(
+                          delay: Duration(seconds: 1),
+                          duration: Duration(seconds: 2))
+                      .then()
+                      .fadeOut()
+                      .animate()
+                      .effect(duration: 3000.ms)
+                      .effect(delay: 750.ms, duration: 1000.ms)
+                      .slideX(begin: 1)
+                      .flipH(begin: -1, alignment: Alignment.centerRight)
+                      .scaleXY(begin: 0.75, curve: Curves.easeInOutQuad)
+                      .untint(begin: 0.6),
+                ],
+              ),
+            ),
+            SizedBox(height: 20.w),
+            GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Image(
+                image: AssetImage("assets/images/ic_close.png"),
+                fit: BoxFit.contain,
+                height: 64.w,
+                width: 64.w,
+              ),
+            )
+          ],
+        );
+      });
+}
 }
