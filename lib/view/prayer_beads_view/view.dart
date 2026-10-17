@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../widgets/snowflake_painter.dart';
 import 'logic.dart';
 
 class PrayerBeadsViewPage extends StatelessWidget {
@@ -13,80 +12,37 @@ class PrayerBeadsViewPage extends StatelessWidget {
   final state = Get.find<PrayerBeadsViewLogic>().state;
 
   @override
-  Widget build(BuildContext context) {
-    return GetBuilder<PrayerBeadsViewLogic>(builder: (logics) {
-      return state.snowflakeValue
-          ? SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: AnimatedBuilder(
-                animation: logic.snowflakeController,
-                builder: (_, __) {
-                  for (var snow in state.snowflakes) {
-                    snow.fall();
-                  }
-                  return CustomPaint(
-                    painter: SnowflakePainter(state.snowflakes),
-                    child: Stack(
-                      alignment: AlignmentDirectional.center,
-                      clipBehavior: Clip.none,
-                      children: [
-                        NotificationListener<ScrollStartNotification>(
-                          onNotification: (notification) {
-                            logic.startKnock();
-                            return true;
-                          },
-                          child: ListView.builder(
-                            padding: EdgeInsets.only(top: 0),
-                            itemExtent: 200.w,
-                            itemCount: 1000,
-                            itemBuilder: (context, index) => Container(
-                              padding: EdgeInsets.only(top: 10.w),
-                              child: Image(
-                                height: 200.w,
-                                image: AssetImage("assets/images/${state.prayerBeadsSkin}"),
-                              ),
-                            ),
-                          ),
-                        ),
-                        leftTopMenu(),
-                        widgetProgss(),
-                        widgetGongde(),
-                      ],
-                    ),
-                  );
-                },
+Widget build(BuildContext context) {
+  return GetBuilder<PrayerBeadsViewLogic>(builder: (logics) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      clipBehavior: Clip.none,
+      children: [
+        NotificationListener<ScrollStartNotification>(
+          onNotification: (notification) {
+            logic.startKnock();
+            return true;
+          },
+          child: ListView.builder(
+            padding: EdgeInsets.only(top: 0),
+            itemExtent: 200.w,
+            itemCount: 1000,
+            itemBuilder: (context, index) => Container(
+              padding: EdgeInsets.only(top: 10.w),
+              child: Image(
+                height: 200.w,
+                image: AssetImage("assets/images/${state.prayerBeadsSkin}"),
               ),
-            )
-          : Stack(
-              alignment: AlignmentDirectional.center,
-              clipBehavior: Clip.none,
-              children: [
-                NotificationListener<ScrollStartNotification>(
-                  onNotification: (notification) {
-                    logic.startKnock();
-                    return true;
-                  },
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(top: 0),
-                    itemExtent: 200.w,
-                    itemCount: 1000,
-                    itemBuilder: (context, index) => Container(
-                      padding: EdgeInsets.only(top: 10.w),
-                      child: Image(
-                        height: 200.w,
-                        image: AssetImage("assets/images/${state.prayerBeadsSkin}"),
-                      ),
-                    ),
-                  ),
-                ),
-                leftTopMenu(),
-                widgetProgss(),
-                widgetGongde(),
-              ],
-            );
-    });
-  }
+            ),
+          ),
+        ),
+        leftTopMenu(),
+        widgetProgss(),
+        widgetGongde(),
+      ],
+    );
+  });
+}
 
   Widget widgetGongde() {
     return Positioned(
