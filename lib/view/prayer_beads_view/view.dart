@@ -12,37 +12,39 @@ class PrayerBeadsViewPage extends StatelessWidget {
   final state = Get.find<PrayerBeadsViewLogic>().state;
 
   @override
-Widget build(BuildContext context) {
-  return GetBuilder<PrayerBeadsViewLogic>(builder: (logics) {
-    return Stack(
-      alignment: AlignmentDirectional.center,
-      clipBehavior: Clip.none,
-      children: [
-        NotificationListener<ScrollStartNotification>(
-          onNotification: (notification) {
-            logic.startKnock();
-            return true;
-          },
-          child: ListView.builder(
-            padding: EdgeInsets.only(top: 0),
-            itemExtent: 200.w,
-            itemCount: 1000,
-            itemBuilder: (context, index) => Container(
-              padding: EdgeInsets.only(top: 10.w),
-              child: Image(
-                height: 200.w,
-                image: AssetImage("assets/images/${state.prayerBeadsSkin}"),
+  Widget build(BuildContext context) {
+    return GetBuilder<PrayerBeadsViewLogic>(builder: (logics) {
+      return Stack(
+        alignment: AlignmentDirectional.center,
+        clipBehavior: Clip.none,
+        children: [
+          // 手串滚动区域
+          NotificationListener<ScrollUpdateNotification>(
+            onNotification: (notification) {
+              logic.startKnock();
+              return true;
+            },
+            child: ListView.builder(
+              padding: EdgeInsets.only(top: 0),
+              itemExtent: 200.w,
+              itemCount: 1000,
+              itemBuilder: (context, index) => Container(
+                padding: EdgeInsets.only(top: 10.w),
+                child: Image(
+                  height: 200.w,
+                  image: AssetImage("assets/images/${state.prayerBeadsSkin}"),
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),
-        ),
-        leftTopMenu(),
-        widgetProgss(),
-        widgetGongde(),
-      ],
-    );
-  });
-}
+          leftTopMenu(),
+          widgetProgss(),
+          widgetGongde(),
+        ],
+      );
+    });
+  }
 
   Widget widgetGongde() {
     return Positioned(
@@ -55,18 +57,10 @@ Widget build(BuildContext context) {
           color: Colors.white,
           fontSize: 36.0.sp,
         ),
-      )
-          .animate(
-            onInit: (controller) {
-              state.gongdeController = controller;
-            },
-            onPlay: (controller) {},
-            onComplete: (controller) {
-              controller.reverse();
-            })
-          .fadeIn(curve: Curves.easeInOutQuint)
-          .moveY(end: -10);
-      );
+      ).animate(
+        controller: state.gongdeController,
+      ).fadeIn(curve: Curves.easeInOutQuint).moveY(end: -10),
+    );
   }
 
   Widget leftTopMenu() {
@@ -91,7 +85,7 @@ Widget build(BuildContext context) {
               logic.vibrateOpen();
             },
             child: Icon(
-              state.isVibrate ? Icons.phonelink_erase_outlined : Icons.phone_iphone_outlined,
+              state.isVibrate ? Icons.vibration_outlined : Icons.smartphone_outlined,
               size: 50.w,
               color: Colors.white,
             ),
@@ -128,20 +122,13 @@ Widget build(BuildContext context) {
                     color: Colors.white,
                     fontSize: 36.sp,
                   ),
-                )
-                    .animate(onPlay: (controller) => controller.repeat())
-                    .shimmer(duration: 1200.ms, color: const Color(0xFF80DDFF))
-                    .animate()
-                    .fadeIn(duration: 1200.ms, curve: Curves.easeOutQuad)
-                    .slide(),
+                ).animate(controller: logic.jiFuController).shimmer(
+                  duration: 1200.ms,
+                  color: const Color(0xFF80DDFF),
+                ),
               ),
             ],
-          )
-              .animate(
-                  controller: logic.jiFuController)
-              .effect(duration: 3000.ms)
-              .effect(delay: 750.ms, duration: 1500.ms)
-              .shake(),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
