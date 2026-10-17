@@ -92,15 +92,14 @@ class PrayerBeadsViewPage extends StatelessWidget {
       top: Get.height / 2,
       left: Get.width / 2 + 130.w,
       child: Text(
-        "${logic.content()}+1",
+        "+1",
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.white,
           fontSize: 36.0.sp,
         ),
-      ),
-    )
-        .animate(
+      )
+          .animate(
             onInit: (controller) {
               state.gongdeController = controller;
             },
@@ -108,8 +107,8 @@ class PrayerBeadsViewPage extends StatelessWidget {
             onComplete: (controller) {
               controller.reverse();
             })
-        .fadeIn(curve: Curves.easeInOutQuint)
-        .moveY(end: -10);
+          .fadeIn(curve: Curves.easeInOutQuint)
+          .moveY(end: -10);
   }
 
   leftTopMenu() {
