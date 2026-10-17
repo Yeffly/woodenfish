@@ -107,15 +107,34 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
           break;
         case Constant.musicKey:
           state.muicKnock = read;
+          if (state.muicKnock) {
+            state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
+            state.bgMusicPlayer.play(AssetSource(bgSoundList[state.selectedBgIndex]), volume:0.5);
+          }else{
+            state.bgMusicPlayer.stop();
+          }
           break;
         case Constant.skinKey:
           state.fishSkin = Constant.dataList[read];
           break;
         case Constant.toneColourKey:
-          state.selectedKnockIndex = int.parse(read);
+          // 修复：读取字符串，查找数组下标，不再int.parse
+          int knockIdx = Constant.toneColour.indexOf(read);
+          if(knockIdx != -1){
+            state.selectedKnockIndex = knockIdx;
+          }
           break;
         case Constant.bgSoundKey:
-          state.selectedBgIndex = int.parse(read);
+          // 修复：读取bg字符串查找下标
+          int bgIdx = Constant.bgMusicList.indexOf(read);
+          if(bgIdx != -1){
+            state.selectedBgIndex = bgIdx;
+            if(state.muicKnock){
+              state.bgMusicPlayer.stop();
+              state.bgMusicPlayer.play(AssetSource(bgSoundList[bgIdx]), volume:0.5);
+              state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
+            }
+          }
           break;
         case Constant.suspendedKey:
           state.suspendedText = read;
@@ -147,12 +166,15 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     var fuwen = Application.getStorage.read(Constant.fuKey) ?? 0;
     state.fuWnImage = Constant.fuWenList[fuwen];
 
-    // 读取【敲击音效】保存下标
-    String knockIndexStr = Application.getStorage.read(Constant.toneColourKey) ?? "0";
-    state.selectedKnockIndex = int.parse(knockIndexStr);
-    // 读取【背景音】保存下标
-    String bgIndexStr = Application.getStorage.read(Constant.bgSoundKey) ?? "0";
-    state.selectedBgIndex = int.parse(bgIndexStr);
+    // 读取【敲击音效】保存字符串，查找下标
+    String knockStr = Application.getStorage.read(Constant.toneColourKey) ?? Constant.toneColour.first;
+    int knockIndex = Constant.toneColour.indexOf(knockStr);
+    state.selectedKnockIndex = knockIndex == -1 ? 0 : knockIndex;
+
+    // 读取【背景音】保存字符串，查找下标
+    String bgStr = Application.getStorage.read(Constant.bgSoundKey) ?? Constant.bgMusicList.first;
+    int bgIndex = Constant.bgMusicList.indexOf(bgStr);
+    state.selectedBgIndex = bgIndex == -1 ? 0 : bgIndex;
 
     double interval = Application.getStorage.read(Constant.intervalTimeKey) ?? 1.0;
     if (interval >= 1) {
@@ -242,7 +264,8 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
   Future<void> changeKnockTone(int index) async {
     if(index <0 || index >= knockSoundList.length) return;
     state.selectedKnockIndex = index;
-    Application.getStorage.write(Constant.toneColourKey, index.toString());
+    String toneStr = Constant.toneColour[index];
+    Application.getStorage.write(Constant.toneColourKey, toneStr);
     update();
   }
 
@@ -250,7 +273,8 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
   Future<void> changeBgTone(int index) async {
     if(index <0 || index >= bgSoundList.length) return;
     state.selectedBgIndex = index;
-    Application.getStorage.write(Constant.bgSoundKey, index.toString());
+    String bgStr = Constant.bgMusicList[index];
+    Application.getStorage.write(Constant.bgSoundKey, bgStr);
     if(state.muicKnock){
       await state.bgMusicPlayer.stop();
       await state.bgMusicPlayer.play(AssetSource(bgSoundList[index]), volume:0.5);
