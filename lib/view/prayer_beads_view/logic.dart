@@ -18,7 +18,6 @@ class PrayerBeadsViewLogic extends GetxController
     with SingleGetTickerProviderMixin {
   final PrayerBeadsViewState state = PrayerBeadsViewState();
 
-  late AnimationController snowflakeController;
   late AnimationController jiFuController;
 
   @override
@@ -26,9 +25,6 @@ class PrayerBeadsViewLogic extends GetxController
     super.onInit();
     jiFuController = AnimationController(vsync: this);
     state.gongdeController = AnimationController(vsync: this);
-    snowflakeController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1))
-          ..repeat();
 
     EventBus.getDefault().register(null, (event) {
       var read = Application.getStorage.read(event.toString()) ?? "";
@@ -45,14 +41,9 @@ class PrayerBeadsViewLogic extends GetxController
         case Constant.suspendedKey:
           state.suspendedText = read;
           break;
-        // =====离线版注释雪花常量分支，解决snowflakeKey找不到报错=====
-        // case Constant.snowflakeKey:
-        //   state.snowflakeValue = read;
-        //   break;
         case Constant.prayerBeadsKey:
           state.prayerBeadsSkin = Constant.prayerBeadsList[read];
           break;
-        // ✅【修复】全局统一使用 bgSoundKey，不再使用 bgMusicKey
         case Constant.bgSoundKey:
           int bgIdx = Constant.bgMusicList.indexOf(read);
           if(bgIdx != -1){
@@ -234,4 +225,13 @@ class PrayerBeadsViewLogic extends GetxController
         );
       });
 }
+
+  @override
+  void onClose() {
+    state.audioPlayer.dispose();
+    state.bgMusicPlayer.dispose();
+    jiFuController.dispose();
+    state.gongdeController.dispose();
+    super.onClose();
+  }
 }
