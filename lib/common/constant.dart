@@ -1,14 +1,5 @@
 class Constant {
-  static const String agreementUrl =
-      "https://img.firefix.cn/fish/agreement.html";
-  static const String privacyUrl = "https://img.firefix.cn/fish/privacy.html";
-  static const String termsUseUrl =
-      "https://www.apple.com/legal/internet-services/itunes/dev/stdeula";
   static bool isClickAgreement = true;
-  static const String resourceUrl =
-      "https://img.firefix.cn/fish/assets/toneColour/";
-  static const String music =
-      "https://img.firefix.cn/fish/assets/audio/dabeizou.mp3";
   static const String isAgree = "is_agree";
   static const String countKey = "count_key";
   static const String musicKey = "music_key";
@@ -20,8 +11,6 @@ class Constant {
   static const String fuKey = "fu_key";
   static const String toneColourKey = "tone_colour_key";
   static const String intervalTimeKey = "interval_time_key";
-  static const String api_host =
-      "https://fish.idianying.xyz/tWDevice/register/";
   static const String autoKnockKey = "auto_knock_key";
   static const String suspendedKey = "suspended_key";
   static const String stagePositionKey = "stage_position_key";
@@ -59,19 +48,13 @@ class Constant {
     "fr.png",
   ];
 
-  static const toneColour = [
-    "k.wav",
-    "o.wav",
-    "i.wav",
-    "l.wav",
-    "q.wav",
-    "m.wav",
-    "p.wav",
-    "h.wav",
-    "j.wav",
-    "n.wav",
-    "muyu.mp3",
-    "g.mp3"
+  // 改为5个本地音色，顺序：01 02 03 04 05
+  static const List<String> toneColour = [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
   ];
 
   static const muyuList = [
