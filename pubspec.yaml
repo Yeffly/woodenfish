@@ -44,6 +44,7 @@ flutter:
   assets:
     - assets/
     - assets/mgc.txt
+    - assets/images/
     - assets/audio/knock/
     - assets/audio/bg/
 
