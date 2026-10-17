@@ -38,7 +38,10 @@ class PrayerBeadsViewLogic extends GetxController
           state.muicKnock = read;
           break;
         case Constant.toneColourKey:
-          state.selectedKnockIndex = read;
+          int knockIdx = Constant.toneColour.indexOf(read);
+          if(knockIdx != -1){
+            state.selectedKnockIndex = knockIdx;
+          }
           break;
         case Constant.suspendedKey:
           state.suspendedText = read;
@@ -50,9 +53,12 @@ class PrayerBeadsViewLogic extends GetxController
         case Constant.prayerBeadsKey:
           state.prayerBeadsSkin = Constant.prayerBeadsList[read];
           break;
-        // 监听背景音索引变化
-        case Constant.bgMusicKey:
-          state.selectedBgIndex = read;
+        // ✅【修复】全局统一使用 bgSoundKey，不再使用 bgMusicKey
+        case Constant.bgSoundKey:
+          int bgIdx = Constant.bgMusicList.indexOf(read);
+          if(bgIdx != -1){
+            state.selectedBgIndex = bgIdx;
+          }
           break;
       }
       update();
@@ -135,11 +141,16 @@ class PrayerBeadsViewLogic extends GetxController
     state.muicKnock = music;
     var skin = Application.getStorage.read(Constant.prayerBeadsKey) ?? 0;
     state.prayerBeadsSkin = Constant.prayerBeadsList[skin];
-    // 读取背景音、敲击音索引
-    int bgIndex = Application.getStorage.read(Constant.bgMusicKey) ?? 0;
-    state.selectedBgIndex = bgIndex;
-    int knockIndex = Application.getStorage.read(Constant.toneColourKey) ?? 0;
-    state.selectedKnockIndex = knockIndex;
+
+    // ✅【修复】读取背景音使用 bgSoundKey，从bgMusicList拿到字符串，再转下标，和木鱼页面逻辑保持完全一致
+    String bgStr = Application.getStorage.read(Constant.bgSoundKey) ?? Constant.bgMusicList.first;
+    int bgIndex = Constant.bgMusicList.indexOf(bgStr);
+    state.selectedBgIndex = bgIndex == -1 ? 0 : bgIndex;
+
+    // 读取敲击音
+    String knockStr = Application.getStorage.read(Constant.toneColourKey) ?? Constant.toneColour.first;
+    int knockIndex = Constant.toneColour.indexOf(knockStr);
+    state.selectedKnockIndex = knockIndex == -1 ? 0 : knockIndex;
 
     if (music) {
       state.bgMusicPlayer.stop();
