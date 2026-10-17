@@ -5,7 +5,6 @@ class Constant {
   static const String musicKey = "music_key";
   static const String vibrateKey = "vibrate_key";
   static const String skinKey = "skin_key";
-  static const String prayerBeadsKey = "prayerBeadsKey";
   static const String isSkinLockKey = "isSkinLockKey";
   static const String fuKey = "fu_key";
   static const String toneColourKey = "tone_colour_key";
@@ -24,15 +23,6 @@ class Constant {
     "h_.png",
     "hb.png",
     "jw.png"
-  ];
-
-  static const List<String> prayerBeadsList = [
-    "fc.png",
-    "fe.png",
-    "ff.png",
-    "fg.png",
-    "fh.png",
-    "fz-3.png",
   ];
 
   static const List<String> fuWenList = [
