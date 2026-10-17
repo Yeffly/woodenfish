@@ -93,7 +93,8 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
       }
     });
 
-    EventBus.getDefault().register(null, (event) {
+    // EventBus 增加 async，音频操作添加await
+    EventBus.getDefault().register(null, (event) async {
       var read = Application.getStorage.read(event.toString()) ?? "";
       switch (event) {
         case Constant.autoKnockKey:
@@ -107,10 +108,10 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
         case Constant.musicKey:
           state.muicKnock = read;
           if (state.muicKnock) {
-            state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
-            state.bgMusicPlayer.play(AssetSource(bgSoundList[state.selectedBgIndex]), volume:0.5);
+            await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
+            await state.bgMusicPlayer.play(AssetSource(bgSoundList[state.selectedBgIndex]), volume:0.5);
           }else{
-            state.bgMusicPlayer.stop();
+            await state.bgMusicPlayer.stop();
           }
           break;
         case Constant.skinKey:
@@ -127,9 +128,9 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
           if(bgIdx != -1){
             state.selectedBgIndex = bgIdx;
             if(state.muicKnock){
-              state.bgMusicPlayer.stop();
-              state.bgMusicPlayer.play(AssetSource(bgSoundList[bgIdx]), volume:0.5);
-              state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
+              await state.bgMusicPlayer.stop();
+              await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
+              await state.bgMusicPlayer.play(AssetSource(bgSoundList[bgIdx]), volume:0.5);
             }
           }
           break;
@@ -253,14 +254,6 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     update();
   }
 
-  Future<void> changeKnockTone(int index) async {
-    if(index <0 || index >= knockSoundList.length) return;
-    state.selectedKnockIndex = index;
-    String toneStr = Constant.toneColour[index];
-    Application.getStorage.write(Constant.toneColourKey, toneStr);
-    update();
-  }
-
   Future<void> changeBgTone(int index) async {
     if(index <0 || index >= bgSoundList.length) return;
     state.selectedBgIndex = index;
@@ -268,8 +261,8 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     Application.getStorage.write(Constant.bgSoundKey, bgStr);
     if(state.muicKnock){
       await state.bgMusicPlayer.stop();
-      await state.bgMusicPlayer.play(AssetSource(bgSoundList[index]), volume:0.5);
       await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
+      await state.bgMusicPlayer.play(AssetSource(bgSoundList[index]), volume:0.5);
     }
     update();
   }
@@ -300,11 +293,6 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     super.onClose();
   }
 
-  // 空函数移除
-  // show() {
-  //   return;
-  // }
-
   String content() {
     if (state.suspendedText.isNotEmpty) {
       return state.suspendedText;
@@ -324,7 +312,7 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
 
   jufuClick() {
     if (state.count > getStageContent()) {
-      state.shareFuImage = Constant.fuList[Random().nextInt(Constant.fuList.length)]['bg'];
+      state.shareFuImage = Constant.fuWenList[Random().nextInt(Constant.fuWenList.length)];
       showFu();
       jiFuController.stop();
       state.stagePosition += 1;
