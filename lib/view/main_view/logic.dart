@@ -112,7 +112,10 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
           state.fishSkin = Constant.dataList[read];
           break;
         case Constant.toneColourKey:
-          state.toneColour = read;
+          state.selectedKnockIndex = int.parse(read);
+          break;
+        case Constant.bgSoundKey:
+          state.selectedBgIndex = int.parse(read);
           break;
         case Constant.suspendedKey:
           state.suspendedText = read;
@@ -143,8 +146,14 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     state.fishSkin = Constant.dataList[skin];
     var fuwen = Application.getStorage.read(Constant.fuKey) ?? 0;
     state.fuWnImage = Constant.fuWenList[fuwen];
-    String colourIndex = Application.getStorage.read(Constant.toneColourKey) ?? "0";
-    state.toneColour = int.parse(colourIndex);
+
+    // 读取【敲击音效】保存下标
+    String knockIndexStr = Application.getStorage.read(Constant.toneColourKey) ?? "0";
+    state.selectedKnockIndex = int.parse(knockIndexStr);
+    // 读取【背景音】保存下标
+    String bgIndexStr = Application.getStorage.read(Constant.bgSoundKey) ?? "0";
+    state.selectedBgIndex = int.parse(bgIndexStr);
+
     double interval = Application.getStorage.read(Constant.intervalTimeKey) ?? 1.0;
     if (interval >= 1) {
       state.intervalTime = interval;
@@ -162,7 +171,7 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     state.muicKnock = bgMusicOpen;
     if (bgMusicOpen) {
       await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
-      await state.bgMusicPlayer.play(AssetSource(bgSoundList[state.toneColour]), volume:0.5);
+      await state.bgMusicPlayer.play(AssetSource(bgSoundList[state.selectedBgIndex]), volume:0.5);
     }else{
       await state.bgMusicPlayer.stop();
     }
@@ -186,11 +195,11 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     });
   }
 
-  // 点击木鱼，播放本地敲击音效（核心修改，不再请求网络音频）
+  // 点击木鱼，播放本地敲击音效
   void startKnock() async {
     // 播放本地敲击音效
     await state.audioPlayer.stop();
-    await state.audioPlayer.play(AssetSource(knockSoundList[state.toneColour]), volume: 1.0);
+    await state.audioPlayer.play(AssetSource(knockSoundList[state.selectedKnockIndex]), volume: 1.0);
 
     state.count += 1;
     Application.getStorage.write(Constant.countKey, state.count);
@@ -222,19 +231,26 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     Application.getStorage.write(Constant.musicKey, state.muicKnock);
     if (state.muicKnock) {
       await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
-      await state.bgMusicPlayer.play(AssetSource(bgSoundList[state.toneColour]), volume:0.5);
+      await state.bgMusicPlayer.play(AssetSource(bgSoundList[state.selectedBgIndex]), volume:0.5);
     } else {
       await state.bgMusicPlayer.stop();
     }
     update();
   }
 
-  /// 切换敲击音色（同时切换敲击声+背景音，如果你想要分开两套选择器，我后面再改）
-  Future<void> changeTone(int index) async {
+  /// 🟢 单独切换敲击音效（只改敲击声，背景音不动）
+  Future<void> changeKnockTone(int index) async {
     if(index <0 || index >= knockSoundList.length) return;
-    state.toneColour = index;
+    state.selectedKnockIndex = index;
     Application.getStorage.write(Constant.toneColourKey, index.toString());
-    // 如果背景音开启，则切换新背景音
+    update();
+  }
+
+  /// 🟢 单独切换背景配乐（只改背景音，敲击声不动）
+  Future<void> changeBgTone(int index) async {
+    if(index <0 || index >= bgSoundList.length) return;
+    state.selectedBgIndex = index;
+    Application.getStorage.write(Constant.bgSoundKey, index.toString());
     if(state.muicKnock){
       await state.bgMusicPlayer.stop();
       await state.bgMusicPlayer.play(AssetSource(bgSoundList[index]), volume:0.5);
