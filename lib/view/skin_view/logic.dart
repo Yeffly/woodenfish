@@ -16,10 +16,8 @@ class SkinViewLogic extends GetxController with SingleGetTickerProviderMixin {
   @override
   void onInit() {
     super.onInit();
-    state.tabController = TabController(length: 3, vsync: this);
+    state.tabController = TabController(length: 2, vsync: this);
     state.skinIndex = Application.getStorage.read(Constant.skinKey) ?? 0;
-    state.prayerBeadsSkinIndex =
-        Application.getStorage.read(Constant.prayerBeadsKey) ?? 0;
   }
 
   @override
@@ -120,21 +118,5 @@ class SkinViewLogic extends GetxController with SingleGetTickerProviderMixin {
     Application.getStorage.write(Constant.fuKey, index);
     EventBus.getDefault().post(Constant.fuKey);
     update();
-  }
-
-  void prayerBeadsPurchase(index) {
-    if (state.prayerBeadsList[index]['isLock'] != null &&
-        state.prayerBeadsList[index]['isLock'] == false) {
-      state.prayerBeadsSkinIndex = index;
-      state.prayerBeadsSkinSelectIndex = index;
-      Application.getStorage.write(Constant.prayerBeadsKey, index);
-      EventBus.getDefault().post(Constant.prayerBeadsKey);
-      update();
-    } else {
-      if (index != 0) {
-        ToastUtil.showProgress(Get.context!);
-        state.prayerBeadsSkinSelectIndex = index;
-      }
-    }
   }
 }
