@@ -33,7 +33,7 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
   late AnimationController jiFuController;
 
   // ========== 本地音频资源定义 ==========
-  // ✅ 敲击音效 WAV
+  // 敲击音效 WAV
   final List<String> knockSoundList = [
     "audio/knock/knock1.wav",
     "audio/knock/knock2.wav",
@@ -169,7 +169,7 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     int knockIndex = Constant.toneColour.indexOf(knockStr);
     state.selectedKnockIndex = knockIndex == -1 ? 0 : knockIndex;
 
-    // 读取背景音
+    // 读取背景音【全局统一 bgSoundKey】
     String bgStr = Application.getStorage.read(Constant.bgSoundKey) ?? Constant.bgMusicList.first;
     int bgIndex = Constant.bgMusicList.indexOf(bgStr);
     state.selectedBgIndex = bgIndex == -1 ? 0 : bgIndex;
@@ -186,7 +186,7 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
       cancelTimer();
     }
 
-    // 背景音乐
+    // 背景音乐开关
     bool bgMusicOpen = Application.getStorage.read(Constant.musicKey) ?? false;
     state.muicKnock = bgMusicOpen;
     if (bgMusicOpen) {
@@ -297,12 +297,14 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     floatTextController.dispose();
     floatTextTransitionController.dispose();
     jiFuController.dispose();
+    cancelTimer();
     super.onClose();
   }
 
-  show() {
-    return;
-  }
+  // 空函数移除
+  // show() {
+  //   return;
+  // }
 
   String content() {
     if (state.suspendedText.isNotEmpty) {
