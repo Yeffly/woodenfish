@@ -6,7 +6,7 @@ import '../../common/constant.dart';
 class MainViewState {
   int count = 0;
   late String fishSkin = Constant.dataList.elementAt(0);
-  late String toneColour = Constant.toneColour.elementAt(0);
+  int toneColour = 0; // 敲击音效下标（改成int，用来选knock1~knock5）
   double opacity = 0.0;
 
   String fuWnImage = Constant.fuWenList.first;
@@ -17,8 +17,12 @@ class MainViewState {
   Timer? timer;
   bool isAgree = false;
 
-  late AudioPlayer audioPlayer;
-  late AudioPlayer musicPlayer;
+  late AudioPlayer audioPlayer;      // 木鱼敲击音效播放器
+  late AudioPlayer bgMusicPlayer;    // 背景循环配乐播放器（改名，区分敲击播放器）
+
+  // ✅ 两套音频独立索引，分开存储
+  int selectedKnockIndex = 0;
+  int selectedBgIndex = 0;
 
   late List<Widget> animatedList = [];
   int animatedRandoms = 0;
@@ -35,6 +39,6 @@ class MainViewState {
 
   MainViewState() {
     audioPlayer = AudioPlayer();
-    musicPlayer = AudioPlayer();
+    bgMusicPlayer = AudioPlayer();
   }
 }
