@@ -11,10 +11,11 @@ class Application {
     getStorage = GetStorage(storageKey);
   }
 
-  ///判断是否登录
-  static bool get isLogin {
-    String? token = getStorage.read(CKey.loginToken);
-    var loginState = getStorage.read(CKey.loginState);
-    return GetUtils.isNull(token) && loginState;
-  }
+  // ========= 删除登录相关代码，不再需要 isLogin =========
+  // ///判断是否登录
+  // static bool get isLogin {
+  //   String? token = getStorage.read(CKey.loginToken);
+  //   var loginState = getStorage.read(CKey.loginState);
+  //   return GetUtils.isNull(token) && loginState;
+  // }
 }
