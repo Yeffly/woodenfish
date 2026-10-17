@@ -24,7 +24,6 @@ class Constant {
       "https://fish.idianying.xyz/tWDevice/register/";
   static const String autoKnockKey = "auto_knock_key";
   static const String suspendedKey = "suspended_key";
-  static const String snowflakeKey = "snowflake_key";
   static const String stagePositionKey = "stage_position_key";
 
   static const dataList = [
