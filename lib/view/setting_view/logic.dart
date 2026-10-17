@@ -1,10 +1,7 @@
 import 'package:get/get.dart';
-import 'package:woodenfish/utils/pub_method.dart';
-import 'package:woodenfish/utils/toast_util.dart';
 
 import '../../common/application.dart';
 import '../../common/constant.dart';
-import '../../generated/l10n.dart';
 import '../../utils/event_bus.dart';
 import 'state.dart';
 
@@ -12,76 +9,67 @@ class SettingViewLogic extends GetxController {
   final SettingViewState state = SettingViewState();
 
   @override
-  void onInit() {
-    super.onInit();
-    PubMethodUtils.parseSensitiveWords().then((value) {
-      state.trie = value;
-    });
-    // PubMethodUtils.parseSensitiveWords1().then((value) {
-    //   state.ac = value;
-    // });
-  }
-
-  getData() async {
-    var suspendedKey = Application.getStorage.read(Constant.suspendedKey) ?? "";
-    if (suspendedKey.isNotEmpty) {
-      state.suspendedText = suspendedKey;
-    }
-    bool s = Application.getStorage.read(Constant.musicKey) ?? false;
-    bool autoKnock = Application.getStorage.read(Constant.autoKnockKey) ?? false;
-    var intervalTime = Application.getStorage.read(Constant.intervalTimeKey) ?? 1.0;
-    state.switchMusicValue = s;
-    state.switchAutoValue = autoKnock;
-    if (intervalTime >= 1) {
-      state.sliderValue = intervalTime;
-    }
-    // var skin = Application.getStorage.read(Constant.skinKey) ?? "";
-    // if (skin.isNotEmpty) {
-    //   state.skinIndex = Constant.dataList.indexOf(skin);
-    // }
-    var toneColour = Application.getStorage.read(Constant.toneColourKey) ?? "";
-    if (toneColour.isNotEmpty) {
-      state.toneColourIndex = Constant.toneColour.indexOf(toneColour);
-    }
-
-    // ===== 新增：读取背景配乐本地存储 =====
-    var bgMusicStr = Application.getStorage.read(Constant.bgSoundKey) ?? "bg01";
-    if (bgMusicStr.isNotEmpty) {
-      state.bgMusicIndex = Constant.bgMusicList.indexOf(bgMusicStr);
-    }
-    // =====================================
-
-    update();
-  }
-
-  @override
   void onReady() {
     super.onReady();
     getData();
   }
 
-  String getToneColour(item) {
-    var index = Constant.toneColour.indexOf(item) + 1;
-    return index >= 10 ? "$index" : "0$index";
+  getData() async {
+    // 读取敲击音色
+    String toneStr = Application.getStorage.read(Constant.toneColourKey) ?? Constant.toneColour.first;
+    state.toneColourIndex = Constant.toneColour.indexOf(toneStr);
+    if(state.toneColourIndex == -1) state.toneColourIndex = 0;
+
+    // 读取背景配乐
+    String bgStr = Application.getStorage.read(Constant.bgSoundKey) ?? Constant.bgMusicList.first;
+    state.bgMusicIndex = Constant.bgMusicList.indexOf(bgStr);
+    if(state.bgMusicIndex == -1) state.bgMusicIndex = 0;
+
+    // 自动敲击
+    state.switchAutoValue = Application.getStorage.read(Constant.autoKnockKey) ?? false;
+    state.intervalTime = Application.getStorage.read(Constant.intervalTimeKey) ?? 1.0;
+
+    // 自定义功德文字
+    String suspended = Application.getStorage.read(Constant.suspendedKey) ?? "";
+    state.textEditingController.text = suspended;
+
+    update();
   }
 
-  // ===== 新增：背景配乐名称格式化 =====
-  String getBgMusicName(String item) {
-    // bg01 -> 01，bg02 ->02
-    return item.replaceAll("bg", "");
+  /// 选择敲击音色
+  void selectTone(int index) {
+    state.toneColourIndex = index;
+    String value = Constant.toneColour[index];
+    Application.getStorage.write(Constant.toneColourKey, value);
+    EventBus.getDefault().post(Constant.toneColourKey);
+    update();
   }
-  // =====================================
 
-  setSuspended() {
-    if (PubMethodUtils.parseSearch(
-        state.textEditingController.text, state.trie)) {
-      ToastUtil.showToast(S.of(Get.context!).suspendedNoTip);
-    } else {
-      Get.back();
-      Application.getStorage
-          .write(Constant.suspendedKey, state.textEditingController.text);
-      state.suspendedText = state.textEditingController.text;
-      EventBus.getDefault().post(Constant.suspendedKey);
-    }
+  /// 选择背景配乐
+  void selectBgMusic(int index) {
+    state.bgMusicIndex = index;
+    String value = Constant.bgMusicList[index];
+    Application.getStorage.write(Constant.bgSoundKey, value);
+    EventBus.getDefault().post(Constant.bgSoundKey);
+    update();
+  }
+
+  void saveSuspendedText(String text) {
+    Application.getStorage.write(Constant.suspendedKey, text);
+    EventBus.getDefault().post(Constant.suspendedKey);
+  }
+
+  void onAutoKnockChange(bool value) {
+    state.switchAutoValue = value;
+    Application.getStorage.write(Constant.autoKnockKey, value);
+    EventBus.getDefault().post(Constant.autoKnockKey);
+    update();
+  }
+
+  void onIntervalChange(double value) {
+    state.intervalTime = value;
+    Application.getStorage.write(Constant.intervalTimeKey, value);
+    EventBus.getDefault().post(Constant.intervalTimeKey);
+    update();
   }
 }
