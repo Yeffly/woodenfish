@@ -28,15 +28,10 @@ class SettingViewLogic extends GetxController {
       state.suspendedText = suspendedKey;
     }
     bool s = Application.getStorage.read(Constant.musicKey) ?? false;
-    bool snowflake =
-        Application.getStorage.read(Constant.snowflakeKey) ?? false;
-    bool autoKnock =
-        Application.getStorage.read(Constant.autoKnockKey) ?? false;
-    var intervalTime =
-        Application.getStorage.read(Constant.intervalTimeKey) ?? 1.0;
+    bool autoKnock = Application.getStorage.read(Constant.autoKnockKey) ?? false;
+    var intervalTime = Application.getStorage.read(Constant.intervalTimeKey) ?? 1.0;
     state.switchMusicValue = s;
     state.switchAutoValue = autoKnock;
-    state.snowflakeValue = snowflake;
     if (intervalTime >= 1) {
       state.sliderValue = intervalTime;
     }
