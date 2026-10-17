@@ -22,7 +22,9 @@ class PrayerBeadsViewPage extends StatelessWidget {
               child: AnimatedBuilder(
                 animation: logic.snowflakeController,
                 builder: (_, __) {
-                  state.snowflakes.forEach((snow) => snow.fall());
+                  for (var snow in state.snowflakes) {
+                    snow.fall();
+                  }
                   return CustomPaint(
                     painter: SnowflakePainter(state.snowflakes),
                     child: Stack(
@@ -35,7 +37,6 @@ class PrayerBeadsViewPage extends StatelessWidget {
                             return true;
                           },
                           child: ListView.builder(
-                            // controller: state.controller,
                             padding: EdgeInsets.only(top: 0),
                             itemExtent: 200.w,
                             itemCount: 1000,
@@ -87,7 +88,7 @@ class PrayerBeadsViewPage extends StatelessWidget {
     });
   }
 
-  widgetGongde() {
+  Widget widgetGongde() {
     return Positioned(
       top: Get.height / 2,
       left: Get.width / 2 + 130.w,
@@ -111,7 +112,7 @@ class PrayerBeadsViewPage extends StatelessWidget {
           .moveY(end: -10);
   }
 
-  leftTopMenu() {
+  Widget leftTopMenu() {
     return Positioned(
       top: Get.statusBarHeight,
       left: 20.w,
@@ -143,7 +144,7 @@ class PrayerBeadsViewPage extends StatelessWidget {
     );
   }
 
-  widgetProgss() {
+  Widget widgetProgss() {
     return Positioned(
       top: 100.h,
       right: 30.w,
@@ -163,7 +164,7 @@ class PrayerBeadsViewPage extends StatelessWidget {
                 ),
               ),
               InkWell(
-                onTap: () => {logic.jufuClick()},
+                onTap: () => logic.jufuClick(),
                 child: Text(
                   "集福",
                   style: TextStyle(
@@ -180,7 +181,6 @@ class PrayerBeadsViewPage extends StatelessWidget {
             ],
           )
               .animate(
-                  // onPlay: (controller) => controller.repeat(),
                   controller: logic.jiFuController)
               .effect(duration: 3000.ms)
               .effect(delay: 750.ms, duration: 1500.ms)
