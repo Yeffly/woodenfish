@@ -13,51 +13,24 @@ class MainViewPage extends StatelessWidget {
   final logic = Get.put(MainViewLogic());
   final state = Get.find<MainViewLogic>().state;
 
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<MainViewLogic>(builder: (logics) {
-      return state.snowflakeValue
-          ? SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: AnimatedBuilder(
-                animation: logic.snowflakeController,
-                builder: (_, __) {
-                  state.snowflakes.forEach((snow) => snow.fall());
-                  return CustomPaint(
-                    painter: SnowflakePainter(state.snowflakes),
-                    child: Stack(
-                      alignment: AlignmentDirectional.center,
-                      clipBehavior: Clip.none,
-                      // fit: StackFit.expand,
-                      children: [
-                        widgetTopFu(),
-                        widgetMuYu(),
-                        widgetGongde(),
-                        widgetGongDeNumber(),
-                        leftTopMenu(),
-                        widgetProgss(),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            )
-          : Stack(
-              alignment: AlignmentDirectional.center,
-              clipBehavior: Clip.none,
-              fit: StackFit.expand,
-              children: [
-                widgetTopFu(),
-                widgetMuYu(),
-                widgetGongde(),
-                widgetGongDeNumber(),
-                leftTopMenu(),
-                widgetProgss(),
-              ],
-            );
-    });
-  }
+@override
+Widget build(BuildContext context) {
+  return GetBuilder<MainViewLogic>(builder: (logics) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      clipBehavior: Clip.none,
+      fit: StackFit.expand,
+      children: [
+        widgetTopFu(),
+        widgetMuYu(),
+        widgetGongde(),
+        widgetGongDeNumber(),
+        leftTopMenu(),
+        widgetProgss(),
+      ],
+    );
+  });
+}
 
   widgetGongDeNumber() {
     return Positioned(
