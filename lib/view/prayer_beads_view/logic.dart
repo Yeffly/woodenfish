@@ -38,7 +38,7 @@ class PrayerBeadsViewLogic extends GetxController
           state.muicKnock = read;
           break;
         case Constant.toneColourKey:
-          state.toneColour = read;
+          state.selectedKnockIndex = read;
           break;
         case Constant.suspendedKey:
           state.suspendedText = read;
@@ -52,7 +52,7 @@ class PrayerBeadsViewLogic extends GetxController
           break;
         // 监听背景音索引变化
         case Constant.bgMusicKey:
-          state.bgMusicIndex = read;
+          state.selectedBgIndex = read;
           break;
       }
       update();
@@ -64,9 +64,9 @@ class PrayerBeadsViewLogic extends GetxController
     state.muicKnock = !state.muicKnock;
     Application.getStorage.write(Constant.musicKey, state.muicKnock);
     if (state.muicKnock) {
-      state.musicPlayer.resume();
+      state.bgMusicPlayer.resume();
     } else {
-      state.musicPlayer.stop();
+      state.bgMusicPlayer.stop();
     }
     update();
   }
@@ -107,9 +107,9 @@ class PrayerBeadsViewLogic extends GetxController
   }
 
   void startKnock() async {
-    // 敲击音 wav，从1开始：knock1.wav / knock2.wav
+    // 敲击音 wav：audio/knock/knock1.wav、knock2.wav
     state.audioPlayer
-        .play(AssetSource("audio/knock${state.toneColour + 1}.wav"), volume: 1.0)
+        .play(AssetSource("audio/knock/knock${state.selectedKnockIndex + 1}.wav"), volume: 1.0)
         .then((value) async {
       state.count += 1;
       Application.getStorage.write(Constant.countKey, state.count);
@@ -135,17 +135,19 @@ class PrayerBeadsViewLogic extends GetxController
     state.muicKnock = music;
     var skin = Application.getStorage.read(Constant.prayerBeadsKey) ?? 0;
     state.prayerBeadsSkin = Constant.prayerBeadsList[skin];
-    // 读取背景音频索引
+    // 读取背景音、敲击音索引
     int bgIndex = Application.getStorage.read(Constant.bgMusicKey) ?? 0;
-    state.bgMusicIndex = bgIndex;
+    state.selectedBgIndex = bgIndex;
+    int knockIndex = Application.getStorage.read(Constant.toneColourKey) ?? 0;
+    state.selectedKnockIndex = knockIndex;
 
     if (music) {
-      state.musicPlayer.stop();
-      // 背景音 mp3，从1开始：bg1.mp3 / bg2.mp3 / bg3.mp3
-      state.musicPlayer.play(AssetSource("audio/bg${state.bgMusicIndex + 1}.mp3"), volume: 0.5);
+      state.bgMusicPlayer.stop();
+      // 背景音 mp3：audio/bg/bg1.mp3、bg2.mp3
+      state.bgMusicPlayer.play(AssetSource("audio/bg/bg${state.selectedBgIndex + 1}.mp3"), volume: 0.5);
     } else {
-      state.musicPlayer.pause();
-      state.musicPlayer.stop();
+      state.bgMusicPlayer.pause();
+      state.bgMusicPlayer.stop();
     }
     update();
   }
