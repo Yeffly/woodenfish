@@ -23,6 +23,8 @@ class SettingViewLogic extends GetxController {
     // 页面销毁，释放定时器
     autoTimer?.cancel();
     autoTimer = null;
+    // ✅ 新增：释放输入框控制器，防止内存泄漏
+    state.textEditingController.dispose();
     super.onClose();
   }
 
