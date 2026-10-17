@@ -4,7 +4,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../widgets/snowflake_painter.dart';
 import 'logic.dart';
 
 class MainViewPage extends StatelessWidget {
