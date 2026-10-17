@@ -12,6 +12,8 @@ class SettingViewState {
   var switchAutoValue = false;
   var isAgree = false;
   var suspendedText = "";
+  // 新增：自动敲击间隔时间，修复编译报错
+  double intervalTime = 1.0;
   final TextEditingController textEditingController =
       TextEditingController(text: "");
 
