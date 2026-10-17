@@ -12,8 +12,12 @@ class PrayerBeadsViewState {
 
   bool isVibrate = true;
 
-  late AudioPlayer musicPlayer;
+  // 修改：重命名为 bgMusicPlayer，新增音频选择索引，和MainView对齐
+  late AudioPlayer bgMusicPlayer;
   late AudioPlayer audioPlayer;
+
+  var selectedKnockIndex = 0;
+  var selectedBgIndex = 0;
 
   var stage = [200, 400, 600, 800, 1000, 1300, 1600, 1900, 2300, 2700];
   var count = 0;
@@ -30,6 +34,6 @@ class PrayerBeadsViewState {
 
   PrayerBeadsViewState() {
     audioPlayer = AudioPlayer();
-    musicPlayer = AudioPlayer();
+    bgMusicPlayer = AudioPlayer();
   }
 }
