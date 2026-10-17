@@ -33,15 +33,15 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
   late AnimationController jiFuController;
 
   // ========== 本地音频资源定义 ==========
-  // 5组敲击音效
+  // ✅ 修改：敲击音效改为 WAV
   final List<String> knockSoundList = [
-    "audio/knock/knock1.mp3",
-    "audio/knock/knock2.mp3",
-    "audio/knock/knock3.mp3",
-    "audio/knock/knock4.mp3",
-    "audio/knock/knock5.mp3",
+    "audio/knock/knock1.wav",
+    "audio/knock/knock2.wav",
+    "audio/knock/knock3.wav",
+    "audio/knock/knock4.wav",
+    "audio/knock/knock5.wav",
   ];
-  //5组背景循环音
+  //5组背景循环音，保持 MP3
   final List<String> bgSoundList = [
     "audio/bg/bg1.mp3",
     "audio/bg/bg2.mp3",
@@ -217,9 +217,9 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     });
   }
 
-  // 点击木鱼，播放本地敲击音效
+  // 点击木鱼，播放本地敲击音效(WAV)
   void startKnock() async {
-    // 播放本地敲击音效
+    // 播放本地敲击音效 WAV
     await state.audioPlayer.stop();
     await state.audioPlayer.play(AssetSource(knockSoundList[state.selectedKnockIndex]), volume: 1.0);
 
