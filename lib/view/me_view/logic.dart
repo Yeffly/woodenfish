@@ -10,12 +10,15 @@ class MeViewLogic extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    // =====离线精简版：注释应用内评价相关逻辑，不再引用isInAppReviewKey=====
+    /*
     if (!Application.getStorage.hasData(Constant.isInAppReviewKey)) {
       Future.delayed(const Duration(milliseconds: 1000 * 10), () {
         // PubMethodUtils.getInAppReview();
         Application.getStorage.write(Constant.isInAppReviewKey, false);
       });
     }
+    */
   }
 
   // ===== 离线版移除网络登录请求，删除getData函数 =====
