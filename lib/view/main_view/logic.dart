@@ -33,7 +33,7 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
   late AnimationController jiFuController;
 
   // ========== 本地音频资源定义 ==========
-  // ✅ 修改：敲击音效改为 WAV
+  // ✅ 敲击音效 WAV
   final List<String> knockSoundList = [
     "audio/knock/knock1.wav",
     "audio/knock/knock2.wav",
@@ -41,7 +41,7 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     "audio/knock/knock4.wav",
     "audio/knock/knock5.wav",
   ];
-  //5组背景循环音，保持 MP3
+  // 背景循环音 MP3
   final List<String> bgSoundList = [
     "audio/bg/bg1.mp3",
     "audio/bg/bg2.mp3",
@@ -118,14 +118,12 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
           state.fishSkin = Constant.dataList[read];
           break;
         case Constant.toneColourKey:
-          // 修复：读取字符串，查找数组下标，不再int.parse
           int knockIdx = Constant.toneColour.indexOf(read);
           if(knockIdx != -1){
             state.selectedKnockIndex = knockIdx;
           }
           break;
         case Constant.bgSoundKey:
-          // 修复：读取bg字符串查找下标
           int bgIdx = Constant.bgMusicList.indexOf(read);
           if(bgIdx != -1){
             state.selectedBgIndex = bgIdx;
@@ -166,12 +164,12 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     var fuwen = Application.getStorage.read(Constant.fuKey) ?? 0;
     state.fuWnImage = Constant.fuWenList[fuwen];
 
-    // 读取【敲击音效】保存字符串，查找下标
+    // 读取敲击音效
     String knockStr = Application.getStorage.read(Constant.toneColourKey) ?? Constant.toneColour.first;
     int knockIndex = Constant.toneColour.indexOf(knockStr);
     state.selectedKnockIndex = knockIndex == -1 ? 0 : knockIndex;
 
-    // 读取【背景音】保存字符串，查找下标
+    // 读取背景音
     String bgStr = Application.getStorage.read(Constant.bgSoundKey) ?? Constant.bgMusicList.first;
     int bgIndex = Constant.bgMusicList.indexOf(bgStr);
     state.selectedBgIndex = bgIndex == -1 ? 0 : bgIndex;
@@ -188,7 +186,7 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
       cancelTimer();
     }
 
-    // 背景音乐读取
+    // 背景音乐
     bool bgMusicOpen = Application.getStorage.read(Constant.musicKey) ?? false;
     state.muicKnock = bgMusicOpen;
     if (bgMusicOpen) {
@@ -198,7 +196,6 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
       await state.bgMusicPlayer.stop();
     }
 
-    // 协议弹窗：已经移除网页页面，直接不再弹出
     state.isAgree = true;
 
     var suspendedKey = Application.getStorage.read(Constant.suspendedKey) ?? "";
@@ -217,9 +214,7 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     });
   }
 
-  // 点击木鱼，播放本地敲击音效(WAV)
   void startKnock() async {
-    // 播放本地敲击音效 WAV
     await state.audioPlayer.stop();
     await state.audioPlayer.play(AssetSource(knockSoundList[state.selectedKnockIndex]), volume: 1.0);
 
@@ -247,7 +242,6 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     state.timer?.cancel();
   }
 
-  /// 背景音开关
   muicOpen() async {
     state.muicKnock = !state.muicKnock;
     Application.getStorage.write(Constant.musicKey, state.muicKnock);
@@ -260,7 +254,6 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     update();
   }
 
-  /// 🟢 单独切换敲击音效（只改敲击声，背景音不动）
   Future<void> changeKnockTone(int index) async {
     if(index <0 || index >= knockSoundList.length) return;
     state.selectedKnockIndex = index;
@@ -269,7 +262,6 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     update();
   }
 
-  /// 🟢 单独切换背景配乐（只改背景音，敲击声不动）
   Future<void> changeBgTone(int index) async {
     if(index <0 || index >= bgSoundList.length) return;
     state.selectedBgIndex = index;
@@ -297,7 +289,6 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
 
   @override
   void onClose() {
-    // 释放两个播放器
     state.audioPlayer.dispose();
     state.bgMusicPlayer.dispose();
     fuController.dispose();
@@ -309,7 +300,6 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     super.onClose();
   }
 
-  // 协议弹窗：直接注释掉，项目已经删掉web页面，不再弹出
   show() {
     return;
   }
