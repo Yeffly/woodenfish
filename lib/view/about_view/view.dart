@@ -36,7 +36,7 @@ class AboutViewPage extends StatelessWidget {
               );
             }),
             Text(
-              "联系我们：zyuan9871@gmail.com",
+              "",
               style: TextStyle(color: Colors.white70, fontSize: 16),
             ),
             Padding(
