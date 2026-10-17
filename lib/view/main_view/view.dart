@@ -138,7 +138,8 @@ class MainViewPage extends StatelessWidget {
               logic.muicOpen();
             },
             child: Icon(
-              state.muicKnock ? Icons.headset_off_outlined : Icons.headset_mic_outlined,
+              // ✅ 修正：开启BGM显示正常耳机，关闭显示带斜杠耳机
+              state.muicKnock ? Icons.headset_mic_outlined : Icons.headset_off_outlined,
               size: 50.w,
               color: Colors.white,
             ),
