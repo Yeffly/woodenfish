@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 
 import '../main_view/logic.dart';
-import '../prayer_beads_view/logic.dart';
 import 'state.dart';
 
 class HomeViewLogic extends GetxController {
@@ -23,9 +22,6 @@ class HomeViewLogic extends GetxController {
     switch (index) {
       case 0:
         Get.find<MainViewLogic>().updatesData();
-        break;
-      case 1:
-        Get.find<PrayerBeadsViewLogic>().updatesData();
         break;
     }
     update();
