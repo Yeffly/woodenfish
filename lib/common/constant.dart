@@ -7,10 +7,9 @@ class Constant {
   static const String skinKey = "skin_key";
   static const String prayerBeadsKey = "prayerBeadsKey";
   static const String isSkinLockKey = "isSkinLockKey";
-  static const String isInAppReviewKey = "isInAppReviewKey";
   static const String fuKey = "fu_key";
   static const String toneColourKey = "tone_colour_key";
-  static const String bgSoundKey = "bg_sound_key"; // 新增：背景配乐持久化key
+  static const String bgMusicKey = "bg_sound_key"; // 背景配乐持久化key，统一命名bgMusicKey
   static const String intervalTimeKey = "interval_time_key";
   static const String autoKnockKey = "auto_knock_key";
   static const String suspendedKey = "suspended_key";
