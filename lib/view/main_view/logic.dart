@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'dart:math';
 
@@ -48,6 +49,9 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     "audio/bg/bg4.mp3",
     "audio/bg/bg5.mp3",
   ];
+
+  // BGM音频操作锁，防止快速切换导致竞态、偶发无声
+  bool _isBgAudioOperating = false;
 
   @override
   void onInit() {
@@ -127,10 +131,17 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
           int bgIdx = Constant.bgMusicList.indexOf(read);
           if(bgIdx != -1){
             state.selectedBgIndex = bgIdx;
-            if(state.muicKnock){
-              await state.bgMusicPlayer.stop();
-              await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
-              await state.bgMusicPlayer.play(AssetSource(bgSoundList[bgIdx]), volume:0.5);
+            if(state.muicKnock && !_isBgAudioOperating){
+              try {
+                _isBgAudioOperating = true;
+                await state.bgMusicPlayer.stop();
+                await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
+                await state.bgMusicPlayer.play(AssetSource(bgSoundList[bgIdx]), volume:0.5);
+              } catch(e) {
+                debugPrint("EventBus切换背景音乐异常：$e");
+              } finally {
+                _isBgAudioOperating = false;
+              }
             }
           }
           break;
@@ -243,26 +254,41 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
   }
 
   muicOpen() async {
-    state.muicKnock = !state.muicKnock;
-    Application.getStorage.write(Constant.musicKey, state.muicKnock);
-    if (state.muicKnock) {
+    // 读取点击前原始状态
+    bool oldStatus = state.muicKnock;
+    if (!oldStatus) {
+      // 原来关闭 → 点击打开背景音乐
       await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
       await state.bgMusicPlayer.play(AssetSource(bgSoundList[state.selectedBgIndex]), volume:0.5);
     } else {
+      // 原来开启 → 点击关闭背景音乐
       await state.bgMusicPlayer.stop();
     }
+    // 动作执行完成后，再翻转状态、存入本地、刷新UI
+    state.muicKnock = !oldStatus;
+    Application.getStorage.write(Constant.musicKey, state.muicKnock);
     update();
   }
 
   Future<void> changeBgTone(int index) async {
     if(index <0 || index >= bgSoundList.length) return;
+    // 如果正在执行音频切换，直接丢弃本次请求，避免并发冲突
+    if (_isBgAudioOperating) return;
+
     state.selectedBgIndex = index;
     String bgStr = Constant.bgMusicList[index];
     Application.getStorage.write(Constant.bgSoundKey, bgStr);
     if(state.muicKnock){
-      await state.bgMusicPlayer.stop();
-      await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
-      await state.bgMusicPlayer.play(AssetSource(bgSoundList[index]), volume:0.5);
+      try {
+        _isBgAudioOperating = true;
+        await state.bgMusicPlayer.stop();
+        await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
+        await state.bgMusicPlayer.play(AssetSource(bgSoundList[index]), volume:0.5);
+      } catch(e) {
+        debugPrint("切换背景音乐异常：$e");
+      } finally {
+        _isBgAudioOperating = false;
+      }
     }
     update();
   }
