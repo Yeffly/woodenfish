@@ -311,14 +311,14 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
   }
 
   jufuClick() {
-    if (state.count > getStageContent()) {
-      state.shareFuImage = Constant.fuWenList[Random().nextInt(Constant.fuWenList.length)];
-      showFu();
-      jiFuController.stop();
-      state.stagePosition += 1;
-      Application.getStorage.write(Constant.stagePositionKey, state.stagePosition);
-    }
+  if (state.count > getStageContent()) {
+    state.shareFuImage = Constant.fuList[Random().nextInt(Constant.fuList.length)]['bg'];
+    showFu();
+    jiFuController.stop();
+    state.stagePosition += 1;
+    Application.getStorage.write(Constant.stagePositionKey, state.stagePosition);
   }
+}
 
   updatesData() {
     getData();
