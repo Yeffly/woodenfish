@@ -12,7 +12,6 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../common/application.dart';
 import '../../common/constant.dart';
-import '../../common/route_config.dart';
 import '../../generated/l10n.dart';
 import '../../utils/event_bus.dart';
 import 'state.dart';
@@ -32,6 +31,24 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
   late AnimationController floatTextTransitionController;
 
   late AnimationController jiFuController;
+
+  // ========== 本地音频资源定义 ==========
+  // 5组敲击音效
+  final List<String> knockSoundList = [
+    "audio/knock/knock1.mp3",
+    "audio/knock/knock2.mp3",
+    "audio/knock/knock3.mp3",
+    "audio/knock/knock4.mp3",
+    "audio/knock/knock5.mp3",
+  ];
+  //5组背景循环音
+  final List<String> bgSoundList = [
+    "audio/bg/bg1.mp3",
+    "audio/bg/bg2.mp3",
+    "audio/bg/bg3.mp3",
+    "audio/bg/bg4.mp3",
+    "audio/bg/bg5.mp3",
+  ];
 
   @override
   void onInit() {
@@ -126,19 +143,8 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     state.fishSkin = Constant.dataList[skin];
     var fuwen = Application.getStorage.read(Constant.fuKey) ?? 0;
     state.fuWnImage = Constant.fuWenList[fuwen];
-    String colour = Application.getStorage.read(Constant.toneColourKey) ?? "";
-    if (colour.isNotEmpty) {
-      state.toneColour = colour;
-    }
-    bool music = Application.getStorage.read(Constant.musicKey) ?? false;
-    state.muicKnock = music;
-    if (music) {
-      state.musicPlayer.stop();
-      state.musicPlayer.play(UrlSource(Constant.music), volume: 0.5);
-    } else {
-      state.musicPlayer.pause();
-      state.musicPlayer.stop();
-    }
+    String colourIndex = Application.getStorage.read(Constant.toneColourKey) ?? "0";
+    state.toneColour = int.parse(colourIndex);
     double interval = Application.getStorage.read(Constant.intervalTimeKey) ?? 1.0;
     if (interval >= 1) {
       state.intervalTime = interval;
@@ -150,16 +156,19 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     } else {
       cancelTimer();
     }
-    state.isAgree = Application.getStorage.read(Constant.isAgree) ?? false;
-    if (state.isAgree) {
-      // PubMethodUtils.umengCommonSdkInit();
-      // String? deviceId = await PlatformDeviceId.getDeviceId;
-      // if (deviceId != null && deviceId.isNotEmpty) {
-      //
-      // }
-    } else {
-      show();
+
+    // 背景音乐读取
+    bool bgMusicOpen = Application.getStorage.read(Constant.musicKey) ?? false;
+    state.muicKnock = bgMusicOpen;
+    if (bgMusicOpen) {
+      await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
+      await state.bgMusicPlayer.play(AssetSource(bgSoundList[state.toneColour]), volume:0.5);
+    }else{
+      await state.bgMusicPlayer.stop();
     }
+
+    // 协议弹窗：已经移除网页页面，直接不再弹出
+    state.isAgree = true;
 
     var suspendedKey = Application.getStorage.read(Constant.suspendedKey) ?? "";
     if (suspendedKey.isNotEmpty) {
@@ -177,26 +186,29 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     });
   }
 
-  void startKnock() {
-    state.audioPlayer.play(UrlSource(Constant.resourceUrl + state.toneColour), volume: 1.0).then((value) async {
-      state.count += 1;
-      Application.getStorage.write(Constant.countKey, state.count);
-      fishSkinController.forward();
-      waterController.forward();
-      floatTextController.forward();
-      floatTextTransitionController.forward();
-      var random = Random();
-      state.top = random.nextInt(230 - 200) + 200;
-      state.left = random.nextInt(Get.width.toInt() - 50).toDouble();
-      state.randomColors = getRandomColor();
-      var canVibrate = await Vibrate.canVibrate;
-      if (canVibrate && state.isVibrate) {
-        Vibrate.feedback(FeedbackType.success);
-      }
-      if (state.count >= getStageContent()) {
-        jiFuController.reverse();
-      }
-    });
+  // 点击木鱼，播放本地敲击音效（核心修改，不再请求网络音频）
+  void startKnock() async {
+    // 播放本地敲击音效
+    await state.audioPlayer.stop();
+    await state.audioPlayer.play(AssetSource(knockSoundList[state.toneColour]), volume: 1.0);
+
+    state.count += 1;
+    Application.getStorage.write(Constant.countKey, state.count);
+    fishSkinController.forward();
+    waterController.forward();
+    floatTextController.forward();
+    floatTextTransitionController.forward();
+    var random = Random();
+    state.top = random.nextInt(230 - 200) + 200;
+    state.left = random.nextInt(Get.width.toInt() - 50).toDouble();
+    state.randomColors = getRandomColor();
+    var canVibrate = await Vibrate.canVibrate;
+    if (canVibrate && state.isVibrate) {
+      Vibrate.feedback(FeedbackType.success);
+    }
+    if (state.count >= getStageContent()) {
+      jiFuController.reverse();
+    }
     update();
   }
 
@@ -204,18 +216,34 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     state.timer?.cancel();
   }
 
-  muicOpen() {
+  /// 背景音开关
+  muicOpen() async {
     state.muicKnock = !state.muicKnock;
     Application.getStorage.write(Constant.musicKey, state.muicKnock);
     if (state.muicKnock) {
-      state.musicPlayer.resume();
+      await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
+      await state.bgMusicPlayer.play(AssetSource(bgSoundList[state.toneColour]), volume:0.5);
     } else {
-      state.musicPlayer.stop();
+      await state.bgMusicPlayer.stop();
     }
     update();
   }
 
-  vibrateOpen() {
+  /// 切换敲击音色（同时切换敲击声+背景音，如果你想要分开两套选择器，我后面再改）
+  Future<void> changeTone(int index) async {
+    if(index <0 || index >= knockSoundList.length) return;
+    state.toneColour = index;
+    Application.getStorage.write(Constant.toneColourKey, index.toString());
+    // 如果背景音开启，则切换新背景音
+    if(state.muicKnock){
+      await state.bgMusicPlayer.stop();
+      await state.bgMusicPlayer.play(AssetSource(bgSoundList[index]), volume:0.5);
+      await state.bgMusicPlayer.setReleaseMode(ReleaseMode.loop);
+    }
+    update();
+  }
+
+  void vibrateOpen() {
     state.isVibrate = !state.isVibrate;
     Application.getStorage.write(Constant.vibrateKey, state.isVibrate);
     update();
@@ -229,6 +257,9 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
 
   @override
   void onClose() {
+    // 释放两个播放器
+    state.audioPlayer.dispose();
+    state.bgMusicPlayer.dispose();
     fuController.dispose();
     fishSkinController.dispose();
     waterController.dispose();
@@ -238,117 +269,9 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
     super.onClose();
   }
 
+  // 协议弹窗：直接注释掉，项目已经删掉web页面，不再弹出
   show() {
-    return showGeneralDialog(
-        context: Get.context!,
-        barrierDismissible: false,
-        barrierLabel: '',
-        transitionDuration: Duration(milliseconds: 400),
-        pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-          return WillPopScope(
-            onWillPop: () async => false,
-            child: Center(
-              child: Container(
-                constraints: BoxConstraints(
-                  minWidth: 200,
-                  maxWidth: 220,
-                  minHeight: 260,
-                ),
-                decoration: BoxDecoration(color: Color(0xFF191919), borderRadius: BorderRadius.circular((8))),
-                child: Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(S.of(context).userAgreement,
-                          style: TextStyle(
-                              color: Colors.white38, fontSize: 15, fontWeight: FontWeight.bold, decoration: TextDecoration.none)),
-                      Container(
-                        margin: EdgeInsets.only(top: 15, bottom: 15),
-                        child: Wrap(
-                          alignment: WrapAlignment.start,
-                          children: [
-                            Text(S.of(context).userAgreementTip,
-                                style: TextStyle(
-                                    color: Colors.white38,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.normal,
-                                    decoration: TextDecoration.none)),
-                            GestureDetector(
-                              child: Text("《${S.of(context).userAgreement}》",
-                                  style: TextStyle(
-                                    color: Colors.white38,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline,
-                                    decorationStyle: TextDecorationStyle.solid,
-                                    decorationColor: Colors.white30,
-                                    decorationThickness: 1,
-                                  )),
-                              onTap: () {
-                                Constant.isClickAgreement = true;
-                                Get.toNamed(
-                                    '${RouteConfig.webPage}?title=${S.of(context).userAgreement}&url=${Constant.agreementUrl}');
-                              },
-                            ),
-                            Text("及",
-                                style: TextStyle(
-                                    color: Colors.white38,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.normal,
-                                    decoration: TextDecoration.none)),
-                            GestureDetector(
-                              child: Text("《${S.of(context).privacyPolicy}》",
-                                  style: TextStyle(
-                                    color: Colors.white38,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline,
-                                    decorationStyle: TextDecorationStyle.solid,
-                                    decorationColor: Colors.white30,
-                                    decorationThickness: 1,
-                                  )),
-                              onTap: () {
-                                Constant.isClickAgreement = false;
-                                Get.toNamed(
-                                    '${RouteConfig.webPage}?title=${S.of(context).privacyPolicy}&url=${Constant.privacyUrl}');
-                              },
-                            )
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Application.getStorage.write(Constant.isAgree, true);
-                          state.isAgree = true;
-                          // PubMethodUtils.umengCommonSdkInit();
-                          getData();
-                          Navigator.of(context, rootNavigator: true).pop();
-                        },
-                        child: Container(
-                          width: 200,
-                          height: 38,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular((45)),
-                            color: const Color(0xff424042),
-                          ),
-                          child: Text(S.of(context).agree,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: Colors.white54,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.none)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        });
+    return;
   }
 
   String content() {
