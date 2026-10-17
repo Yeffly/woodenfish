@@ -50,8 +50,8 @@ flutter:
   assets:
     - assets/
     - assets/mgc.txt
-    - assets/images/
-    - assets/sound/
+    - assets/audio/knock/
+    - assets/audio/bg/
 
 flutter_intl:
   enabled: true
