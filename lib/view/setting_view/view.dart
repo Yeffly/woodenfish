@@ -65,27 +65,6 @@ class SettingViewPage extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(S.of(context).snowflakeText,
-                        style: const TextStyle(color: Colors.white, fontSize: 16, fontFamily: "zzFontFamily")),
-                    Switch.adaptive(
-                        activeColor: Colors.amber,
-                        inactiveTrackColor: Colors.grey,
-                        value: state.snowflakeValue,
-                        onChanged: (value) {
-                          state.snowflakeValue = !state.snowflakeValue;
-                          Application.getStorage.write(Constant.snowflakeKey, state.snowflakeValue);
-                          EventBus.getDefault().post(Constant.snowflakeKey);
-                          logic.update();
-                        })
-                  ],
-                ),
-              ),
-              Padding(
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
                 child: Row(
                   children: [
@@ -111,65 +90,6 @@ class SettingViewPage extends StatelessWidget {
                   ],
                 ),
               ),
-              // Padding(
-              //   padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
-              //   child: Row(
-              //     children: [
-              //       Text(S.of(context).skin,
-              //           style: TextStyle(
-              //               color: Colors.white,
-              //               fontSize: 16,
-              //               fontFamily: "zzFontFamily"),
-              //           textAlign: TextAlign.start),
-              //     ],
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10),
-              //   child: SizedBox(
-              //       height: 150.0,
-              //       child: GridView(
-              //         padding: const EdgeInsets.symmetric(vertical: 0),
-              //         gridDelegate:
-              //             const SliverGridDelegateWithFixedCrossAxisCount(
-              //           crossAxisCount: 5,
-              //         ),
-              //         children: Constant.dataList
-              //             .map((item) => InkWell(
-              //                   borderRadius:
-              //                       const BorderRadius.all(Radius.circular(50)),
-              //                   child: Container(
-              //                     alignment: Alignment.center,
-              //                     margin: const EdgeInsets.all(8),
-              //                     decoration: Constant.dataList.indexOf(item) ==
-              //                             state.skinIndex
-              //                         ? const BoxDecoration(
-              //                             shape: BoxShape.circle,
-              //                             color: Colors.white70,
-              //                           )
-              //                         : const BoxDecoration(
-              //                             shape: BoxShape.circle,
-              //                             color: Color(0xff424042),
-              //                           ),
-              //                     child: Image(
-              //                       image: AssetImage("assets/images/$item"),
-              //                       width: 56.0,
-              //                       height: 56.0,
-              //                       fit: BoxFit.fill,
-              //                     ),
-              //                   ),
-              //                   onTap: () {
-              //                     state.skinIndex =
-              //                         Constant.dataList.indexOf(item);
-              //                     Application.getStorage
-              //                         .write(Constant.skinKey, item);
-              //                     EventBus.getDefault().post(Constant.skinKey);
-              //                     logic.update();
-              //                   },
-              //                 ))
-              //             .toList(),
-              //       )),
-              // ),
               Padding(
                 padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
                 child: Row(
