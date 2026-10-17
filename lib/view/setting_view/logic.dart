@@ -43,6 +43,14 @@ class SettingViewLogic extends GetxController {
     if (toneColour.isNotEmpty) {
       state.toneColourIndex = Constant.toneColour.indexOf(toneColour);
     }
+
+    // ===== 新增：读取背景配乐本地存储 =====
+    var bgMusicStr = Application.getStorage.read(Constant.bgSoundKey) ?? "bg01";
+    if (bgMusicStr.isNotEmpty) {
+      state.bgMusicIndex = Constant.bgMusicList.indexOf(bgMusicStr);
+    }
+    // =====================================
+
     update();
   }
 
@@ -56,6 +64,13 @@ class SettingViewLogic extends GetxController {
     var index = Constant.toneColour.indexOf(item) + 1;
     return index >= 10 ? "$index" : "0$index";
   }
+
+  // ===== 新增：背景配乐名称格式化 =====
+  String getBgMusicName(String item) {
+    // bg01 -> 01，bg02 ->02
+    return item.replaceAll("bg", "");
+  }
+  // =====================================
 
   setSuspended() {
     if (PubMethodUtils.parseSearch(
