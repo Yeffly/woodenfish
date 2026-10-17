@@ -2,8 +2,6 @@
     package="com.xhx.woodenfish">
 
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:name=".MyApp"
