@@ -58,8 +58,8 @@ dependency_overrides:
 # ===== 安卓自适应图标配置｜背景纯黑 =====
 flutter_launcher_icons:
   android: true
+  android_adaptive_icon:
+    foreground_image_path: "assets/icon/ic_launcher_foreground.png"
+    background_color: "#000000"
   ios: false
-  image_path: "assets/icon/app_icon.png"
-  adaptive_icon_foreground: "assets/icon/app_icon.png"
-  adaptive_icon_background: "#000000"
-  min_sdk_android: 21
+  image_path: "assets/icon/android_legacy_icon.png"
