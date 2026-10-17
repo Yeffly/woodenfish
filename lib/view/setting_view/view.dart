@@ -14,18 +14,25 @@ class SettingViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF222222),
+      backgroundColor: const Color(0xFF1A1A1A),
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "设置",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: GestureDetector(
           onTap: () => Get.back(),
-          child: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          child: Padding(
+            padding: EdgeInsets.only(left: 12.w),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          ),
         ),
       ),
       body: GetBuilder<SettingViewLogic>(
@@ -35,39 +42,35 @@ class SettingViewPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ===== 敲击音色 卡片 =====
-                buildItemCard(
+                // ========== 敲击音色 卡片 ==========
+                buildCard(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "敲击音色",
-                        style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                      ),
-                      SizedBox(height: 12.h),
+                      buildSectionTitle("敲击音色"),
+                      SizedBox(height: 14.h),
                       Wrap(
-                        spacing: 10.w,
-                        runSpacing: 10.w,
+                        spacing: 12.w,
+                        runSpacing: 12.w,
                         children: List.generate(Constant.toneColour.length, (index) {
                           String item = Constant.toneColour[index];
                           bool selected = state.toneColourIndex == index;
                           return InkWell(
                             borderRadius: BorderRadius.circular(12.r),
-                            onTap: () {
-                              logic.selectTone(index);
-                            },
+                            onTap: () => logic.selectTone(index),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
                               curve: Curves.easeOut,
-                              width: 80.w,
-                              height: 80.w,
+                              width: 84.w,
+                              height: 84.w,
                               decoration: BoxDecoration(
-                                color: selected ? Colors.amber : const Color(0xFF383838),
+                                color: selected ? Colors.amber : const Color(0xFF2C2C2C),
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: Center(
                                 child: Text(
                                   item,
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: selected ? Colors.black : Colors.white,
                                     fontSize: 15.sp,
@@ -81,41 +84,37 @@ class SettingViewPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 18.h),
 
-                // ===== 背景配乐 卡片 =====
-                buildItemCard(
+                // ========== 背景配乐 卡片 ==========
+                buildCard(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "背景配乐",
-                        style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                      ),
-                      SizedBox(height: 12.h),
+                      buildSectionTitle("背景配乐"),
+                      SizedBox(height: 14.h),
                       Wrap(
-                        spacing: 10.w,
-                        runSpacing: 10.w,
+                        spacing: 12.w,
+                        runSpacing: 12.w,
                         children: List.generate(Constant.bgMusicList.length, (index) {
                           String item = Constant.bgMusicList[index];
                           bool selected = state.bgMusicIndex == index;
                           return InkWell(
                             borderRadius: BorderRadius.circular(12.r),
-                            onTap: () {
-                              logic.selectBgMusic(index);
-                            },
+                            onTap: () => logic.selectBgMusic(index),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
                               curve: Curves.easeOut,
-                              width: 80.w,
-                              height: 80.w,
+                              width: 84.w,
+                              height: 84.w,
                               decoration: BoxDecoration(
-                                color: selected ? Colors.amber : const Color(0xFF383838),
+                                color: selected ? Colors.amber : const Color(0xFF2C2C2C),
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: Center(
                                 child: Text(
                                   item,
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: selected ? Colors.black : Colors.white,
                                     fontSize: 15.sp,
@@ -129,71 +128,57 @@ class SettingViewPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 18.h),
 
-                // ===== 自定义功德文字 卡片【重点优化：缩小输入框高度】 =====
-                buildItemCard(
+                // ========== 自定义功德文字 卡片 ==========
+                buildCard(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "自定义功德文字",
-                        style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                      ),
-                      SizedBox(height: 10.h),
+                      buildSectionTitle("自定义功德文字"),
+                      SizedBox(height: 14.h),
                       TextField(
                         controller: state.textEditingController,
-                        style: TextStyle(color: Colors.white, fontSize:15.sp),
-                        // 单行输入框，缩小高度
+                        style: TextStyle(color: Colors.white, fontSize: 16.sp),
                         maxLines: 1,
                         decoration: InputDecoration(
                           hintText: "不填则使用默认文字",
-                          hintStyle: TextStyle(color: Colors.white54, fontSize:14.sp),
+                          hintStyle: TextStyle(color: Colors.white54, fontSize: 15.sp),
                           filled: true,
-                          fillColor: const Color(0xFF333333),
-                          contentPadding: EdgeInsets.symmetric(horizontal:12.w, vertical:10.h),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.r),
-                            borderSide: const BorderSide(color: Colors.white38),
-                          ),
+                          fillColor: const Color(0xFF242424),
+                          // 重点：控制输入框高度，解决输入框过高问题
+                          contentPadding: EdgeInsets.symmetric(horizontal:14.w, vertical:10.h),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.r),
                             borderSide: const BorderSide(color: Colors.white38),
+                            borderRadius: BorderRadius.circular(10.r),
                           ),
                           focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.amber, width:1.4),
                             borderRadius: BorderRadius.circular(10.r),
-                            borderSide: const BorderSide(color: Colors.amber, width:1.5),
                           ),
                         ),
-                        onChanged: (value) {
-                          logic.saveSuspendedText(value);
-                        },
+                        onChanged: (value) => logic.saveSuspendedText(value),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 18.h),
 
-                // ===== 自动敲击 卡片 =====
-                buildItemCard(
+                // ========== 自动敲击 卡片 ==========
+                buildCard(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "自动敲击",
-                            style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                          ),
+                          buildSectionTitle("自动敲击"),
                           Switch(
                             value: state.switchAutoValue,
                             activeColor: Colors.amber,
                             activeTrackColor: Colors.amber.withOpacity(0.5),
                             inactiveTrackColor: const Color(0xFF383838),
-                            onChanged: (bool val) {
-                              logic.onAutoKnockChange(val);
-                            },
+                            onChanged: (bool val) => logic.onAutoKnockChange(val),
                           ),
                         ],
                       ),
@@ -203,6 +188,7 @@ class SettingViewPage extends StatelessWidget {
                         style: TextStyle(color: Colors.white70, fontSize: 14.sp),
                       ),
                       SizedBox(height: 6.h),
+                      // ===================== Slider【完全原样保留你原来的代码，只改颜色外观，不动回调逻辑！！】 =====================
                       Slider(
                         min: 1,
                         max: 10,
@@ -210,11 +196,9 @@ class SettingViewPage extends StatelessWidget {
                         inactiveColor: const Color(0xFF383838),
                         thumbColor: Colors.amber,
                         value: state.intervalTime,
-                        // 拖动过程：只修改state预览值，删掉错误的update()
                         onChanged: (double val) {
                           state.intervalTime = val;
                         },
-                        // 松手结束拖动，才执行保存+重启定时器
                         onChangeEnd: (double val) {
                           logic.onIntervalChange(val);
                         },
@@ -222,7 +206,7 @@ class SettingViewPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height:30.h),
+                SizedBox(height: 30.h),
               ],
             ),
           );
@@ -231,16 +215,28 @@ class SettingViewPage extends StatelessWidget {
     );
   }
 
-  /// 封装通用卡片组件，统一样式
-  Widget buildItemCard({required Widget child}) {
+  /// 通用卡片
+  Widget buildCard({required Widget child}) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: const Color(0xFF2B2B2B),
-        borderRadius: BorderRadius.circular(14.r),
+        color: const Color(0xFF242424),
+        borderRadius: BorderRadius.circular(16.r),
       ),
       child: child,
+    );
+  }
+
+  /// 板块标题统一样式
+  Widget buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 18.sp,
+        fontWeight: FontWeight.w500,
+      ),
     );
   }
 }
