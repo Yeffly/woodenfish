@@ -144,6 +144,64 @@ class SettingViewPage extends StatelessWidget {
                           .toList(),
                     )),
               ),
+
+              // ========== 新增：背景BGM选择区域 ==========
+              Padding(
+                padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
+                child: Row(
+                  children: [
+                    Text("背景配乐",
+                        style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: "zzFontFamily"),
+                        textAlign: TextAlign.start),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: SizedBox(
+                    height: 150.0,
+                    child: GridView(
+                      padding: const EdgeInsets.symmetric(vertical: 0),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 6,
+                      ),
+                      children: Constant.bgMusicList
+                          .map((item) => InkWell(
+                                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  margin: const EdgeInsets.all(8),
+                                  transformAlignment: Alignment.center,
+                                  decoration: Constant.bgMusicList.indexOf(item) == state.bgMusicIndex
+                                      ? const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.amber,
+                                        )
+                                      : const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xff424042),
+                                        ),
+                                  child: Text(
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    logic.getBgMusicName(item),
+                                  ),
+                                ),
+                                onTap: () {
+                                  state.bgMusicIndex = Constant.bgMusicList.indexOf(item);
+                                  Application.getStorage.write(Constant.bgSoundKey, item);
+                                  EventBus.getDefault().post(Constant.bgSoundKey);
+                                  logic.update();
+                                },
+                              ))
+                          .toList(),
+                    )),
+              ),
+              // ========== 背景配乐区域结束 ==========
+
               Padding(
                 padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
                 child: Row(
