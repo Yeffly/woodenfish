@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../common/application.dart';
 import '../../common/constant.dart';
-import '../../utils/event_bus.dart';
 import 'logic.dart';
 
 class SettingViewPage extends StatelessWidget {
@@ -146,7 +144,7 @@ class SettingViewPage extends StatelessWidget {
               ),
               SizedBox(height: 10.w),
               Text(
-                "敲击间隔：${state.intervalTime} 秒",
+                "敲击间隔：${state.intervalTime.toStringAsFixed(1)} 秒",
                 style: TextStyle(color: Colors.white70, fontSize: 14.sp),
               ),
               Slider(
