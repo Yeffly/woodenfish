@@ -22,7 +22,6 @@ class Constant {
     "h5.png",
     "h_.png",
     "hb.png",
-    "jw.png"
   ];
 
   static const List<String> fuWenList = [
@@ -98,12 +97,6 @@ class Constant {
       "isLock": true,
       "price": '',
       "title": "圣诞木鱼",
-    },
-    {
-      "bg": "jw.png",
-      "isLock": true,
-      "price": '',
-      "title": "狮子头木鱼",
     }
   ];
 
