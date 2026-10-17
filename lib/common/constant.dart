@@ -9,7 +9,7 @@ class Constant {
   static const String isSkinLockKey = "isSkinLockKey";
   static const String fuKey = "fu_key";
   static const String toneColourKey = "tone_colour_key";
-  static const String bgMusicKey = "bg_sound_key"; // 背景配乐持久化key，统一命名bgMusicKey
+  static const String bgSoundKey = "bg_sound_key"; // 🔴全局固定：背景音存储key，所有页面统一读这个
   static const String intervalTimeKey = "interval_time_key";
   static const String autoKnockKey = "auto_knock_key";
   static const String suspendedKey = "suspended_key";
@@ -48,7 +48,7 @@ class Constant {
     "fr.png",
   ];
 
-  // 改为5个本地敲击音色，顺序：01 02 03 04 05
+  // 5个本地敲击音色
   static const List<String> toneColour = [
     "01",
     "02",
@@ -57,7 +57,7 @@ class Constant {
     "05",
   ];
 
-  // 新增：5个背景BGM列表，和敲击音色数量保持一致
+  // 5个本地BGM资源数组
   static const List<String> bgMusicList = [
     "bg01",
     "bg02",
