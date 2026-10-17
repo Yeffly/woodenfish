@@ -52,45 +52,6 @@ class SkinViewState {
     }
   ];
 
-  var prayerBeadsList = [
-    {
-      "bg": "fc.png",
-      "isLock": false,
-      "price": '',
-      "title": "夜明佛珠",
-    },
-    {
-      "bg": "fe.png",
-      "isLock": false,
-      "price": '',
-      "title": "大理石佛珠",
-    },
-    {
-      "bg": "ff.png",
-      "isLock": false,
-      "price": '',
-      "title": "玻璃珠佛珠",
-    },
-    {
-      "bg": "fg.png",
-      "isLock": false,
-      "price": '',
-      "title": "纹理佛珠",
-    },
-    {
-      "bg": "fh.png",
-      "isLock": false,
-      "price": '',
-      "title": "灰弹佛珠",
-    },
-    {
-      "bg": "fz-3.png",
-      "isLock": false,
-      "price": '',
-      "title": "紫檀木佛珠",
-    },
-  ];
-
   var fuList = [
     {
       "bg": "fi.png",
@@ -157,8 +118,6 @@ class SkinViewState {
 
   int skinIndex = 0;
   int skinSelectIndex = 0;
-  int prayerBeadsSkinIndex = 0;
-  int prayerBeadsSkinSelectIndex = 0;
   int fuIndex = 0;
 
   // BannerAd? bannerAd = null;
