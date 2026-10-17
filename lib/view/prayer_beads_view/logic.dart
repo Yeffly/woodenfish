@@ -43,11 +43,16 @@ class PrayerBeadsViewLogic extends GetxController
         case Constant.suspendedKey:
           state.suspendedText = read;
           break;
-        case Constant.snowflakeKey:
-          state.snowflakeValue = read;
-          break;
+        // =====离线版注释雪花常量分支，解决snowflakeKey找不到报错=====
+        // case Constant.snowflakeKey:
+        //   state.snowflakeValue = read;
+        //   break;
         case Constant.prayerBeadsKey:
           state.prayerBeadsSkin = Constant.prayerBeadsList[read];
+          break;
+        // 监听背景音索引变化
+        case Constant.bgMusicKey:
+          state.bgMusicIndex = read;
           break;
       }
       update();
@@ -102,8 +107,9 @@ class PrayerBeadsViewLogic extends GetxController
   }
 
   void startKnock() async {
+    // 敲击音 wav，从1开始：knock1.wav / knock2.wav
     state.audioPlayer
-        .play(UrlSource(Constant.resourceUrl + state.toneColour), volume: 1.0)
+        .play(AssetSource("audio/knock${state.toneColour + 1}.wav"), volume: 1.0)
         .then((value) async {
       state.count += 1;
       Application.getStorage.write(Constant.countKey, state.count);
@@ -129,9 +135,14 @@ class PrayerBeadsViewLogic extends GetxController
     state.muicKnock = music;
     var skin = Application.getStorage.read(Constant.prayerBeadsKey) ?? 0;
     state.prayerBeadsSkin = Constant.prayerBeadsList[skin];
+    // 读取背景音频索引
+    int bgIndex = Application.getStorage.read(Constant.bgMusicKey) ?? 0;
+    state.bgMusicIndex = bgIndex;
+
     if (music) {
       state.musicPlayer.stop();
-      state.musicPlayer.play(UrlSource(Constant.music), volume: 0.5);
+      // 背景音 mp3，从1开始：bg1.mp3 / bg2.mp3 / bg3.mp3
+      state.musicPlayer.play(AssetSource("audio/bg${state.bgMusicIndex + 1}.mp3"), volume: 0.5);
     } else {
       state.musicPlayer.pause();
       state.musicPlayer.stop();
