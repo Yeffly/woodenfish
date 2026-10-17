@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:math';
 
@@ -107,6 +106,16 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
             startTimer();
           } else {
             cancelTimer();
+          }
+          break;
+        case Constant.intervalTimeKey:
+          double newInterval = Application.getStorage.read(Constant.intervalTimeKey) ?? 1.0;
+          if(newInterval >= 1){
+            state.intervalTime = newInterval;
+            // 如果自动敲击当前是开启状态，销毁旧定时器，重建定时器，使用新间隔
+            if(state.autoKnock){
+              startTimer();
+            }
           }
           break;
         case Constant.musicKey:
@@ -218,7 +227,9 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
   }
 
   void startTimer() {
-    Duration duration = Duration(seconds: state.intervalTime.toInt());
+    // 转毫秒，支持小数，9.9秒 = 9900毫秒
+    int ms = (state.intervalTime * 1000).round();
+    Duration duration = Duration(milliseconds: ms);
     cancelTimer();
     state.timer = Timer.periodic(duration, (timer) {
       startKnock();
@@ -337,84 +348,84 @@ class MainViewLogic extends GetxController with SingleGetTickerProviderMixin {
   }
 
   jufuClick() {
-  if (state.count > getStageContent()) {
-    state.shareFuImage = Constant.fuList[Random().nextInt(Constant.fuList.length)]['bg'];
-    showFu();
-    jiFuController.stop();
-    state.stagePosition += 1;
-    Application.getStorage.write(Constant.stagePositionKey, state.stagePosition);
+    if (state.count > getStageContent()) {
+      state.shareFuImage = Constant.fuList[Random().nextInt(Constant.fuList.length)]['bg'];
+      showFu();
+      jiFuController.stop();
+      state.stagePosition += 1;
+      Application.getStorage.write(Constant.stagePositionKey, state.stagePosition);
+    }
   }
-}
 
   updatesData() {
     getData();
   }
 
-showFu() {
-  return showGeneralDialog(
-      context: Get.context!,
-      barrierDismissible: false,
-      barrierLabel: '',
-      transitionDuration: Duration(milliseconds: 400),
-      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 400.w,
-              constraints: BoxConstraints(minHeight: 720.w, maxHeight: 800.w),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+  showFu() {
+    return showGeneralDialog(
+        context: Get.context!,
+        barrierDismissible: false,
+        barrierLabel: '',
+        transitionDuration: Duration(milliseconds: 400),
+        pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 400.w,
+                constraints: BoxConstraints(minHeight: 720.w, maxHeight: 800.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image(
+                      image: AssetImage("assets/images/${state.shareFuImage}"),
+                      fit: BoxFit.contain,
+                      height: 600.w,
+                    )
+                        .animate(adapter: ValueAdapter(0.5))
+                        .shimmer(
+                          colors: [
+                            const Color(0xFFFFFF00),
+                            const Color(0xFF00FF00),
+                            const Color(0xFF00FFFF),
+                            const Color(0xFF0033FF),
+                            const Color(0xFFFF00FF),
+                            const Color(0xFFFF0000),
+                            const Color(0xFFFFFF00),
+                          ],
+                        )
+                        .animate(onPlay: (controller) => controller.repeat(reverse: true))
+                        .saturate(delay: Duration(seconds: 1), duration: Duration(seconds: 2))
+                        .then()
+                        .fadeOut()
+                        .animate()
+                        .effect(duration: 3000.ms)
+                        .effect(delay: 750.ms, duration: 1000.ms)
+                        .slideX(begin: 1)
+                        .flipH(begin: -1, alignment: Alignment.centerRight)
+                        .scaleXY(begin: 0.75, curve: Curves.easeInOutQuad)
+                        .untint(begin: 0.6),
+                  ],
+                ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image(
-                    image: AssetImage("assets/images/${state.shareFuImage}"),
+              SizedBox(height: 20.w),
+              GestureDetector(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Image(
+                    image: AssetImage("assets/images/ic_close.png"),
                     fit: BoxFit.contain,
-                    height: 600.w,
+                    height: 64.w,
+                    width: 64.w,
                   )
-                      .animate(adapter: ValueAdapter(0.5))
-                      .shimmer(
-                        colors: [
-                          const Color(0xFFFFFF00),
-                          const Color(0xFF00FF00),
-                          const Color(0xFF00FFFF),
-                          const Color(0xFF0033FF),
-                          const Color(0xFFFF00FF),
-                          const Color(0xFFFF0000),
-                          const Color(0xFFFFFF00),
-                        ],
-                      )
-                      .animate(onPlay: (controller) => controller.repeat(reverse: true))
-                      .saturate(delay: Duration(seconds: 1), duration: Duration(seconds: 2))
-                      .then()
-                      .fadeOut()
-                      .animate()
-                      .effect(duration: 3000.ms)
-                      .effect(delay: 750.ms, duration: 1000.ms)
-                      .slideX(begin: 1)
-                      .flipH(begin: -1, alignment: Alignment.centerRight)
-                      .scaleXY(begin: 0.75, curve: Curves.easeInOutQuad)
-                      .untint(begin: 0.6),
-                ],
-              ),
-            ),
-            SizedBox(height: 20.w),
-            GestureDetector(
-              onTap: () {
-                Get.back();
-              },
-              child: Image(
-                image: AssetImage("assets/images/ic_close.png"),
-                fit: BoxFit.contain,
-                height: 64.w,
-                width: 64.w,
               )
-            )
-          ],
-        );
-      });
-}
+            ],
+          );
+        });
+  }
 }
