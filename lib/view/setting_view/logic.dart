@@ -14,7 +14,7 @@ class SettingViewLogic extends GetxController {
     getData();
   }
 
-  getData() async {
+  Future<void> getData() async {
     // 读取敲击音色
     String toneStr = Application.getStorage.read(Constant.toneColourKey) ?? Constant.toneColour.first;
     state.toneColourIndex = Constant.toneColour.indexOf(toneStr);
