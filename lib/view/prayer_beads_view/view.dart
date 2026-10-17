@@ -66,6 +66,7 @@ Widget build(BuildContext context) {
             })
           .fadeIn(curve: Curves.easeInOutQuint)
           .moveY(end: -10);
+      );
   }
 
   Widget leftTopMenu() {
