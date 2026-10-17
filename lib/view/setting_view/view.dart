@@ -4,12 +4,11 @@ import 'package:get/get.dart';
 
 import '../../common/application.dart';
 import '../../common/constant.dart';
-import '../../generated/l10n.dart';
 import '../../utils/event_bus.dart';
 import 'logic.dart';
 
 class SettingViewPage extends StatelessWidget {
-  SettingViewPage({Key? key}) : super(key: key);
+  SettingViewPage({super.key});
 
   final logic = Get.put(SettingViewLogic());
   final state = Get.find<SettingViewLogic>().state;
@@ -17,242 +16,151 @@ class SettingViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(S.of(context).setting),
-        ),
-        body: GetBuilder<SettingViewLogic>(builder: (logics) {
-          return Column(
+      backgroundColor: Colors.black87,
+      appBar: AppBar(
+        title: const Text("设置"),
+        backgroundColor: Colors.transparent,
+      ),
+      body: GetBuilder<SettingViewLogic>(builder: (_) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20, bottom: 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(S.of(context).bgm, style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: "zzFontFamily")),
-                    Switch.adaptive(
-                        activeColor: Colors.amber,
-                        inactiveTrackColor: Colors.grey,
-                        value: state.switchMusicValue,
-                        onChanged: (value) {
-                          state.switchMusicValue = !state.switchMusicValue;
-                          Application.getStorage.write(Constant.musicKey, state.switchMusicValue);
-                          EventBus.getDefault().post(Constant.musicKey);
-                          logic.update();
-                        })
-                  ],
-                ),
+              // ===== 敲击音色选择 =====
+              Text(
+                "敲击音色",
+                style: TextStyle(color: Colors.white, fontSize: 18.sp),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(S.of(context).automaticTapping,
-                        style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: "zzFontFamily")),
-                    Switch.adaptive(
-                        activeColor: Colors.amber,
-                        inactiveTrackColor: Colors.grey,
-                        value: state.switchAutoValue,
-                        onChanged: (value) {
-                          state.switchAutoValue = !state.switchAutoValue;
-                          Application.getStorage.write(Constant.autoKnockKey, state.switchAutoValue);
-                          EventBus.getDefault().post(Constant.autoKnockKey);
-                          logic.update();
-                        })
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
-                child: Row(
-                  children: [
-                    Text(S.of(context).suspendedText,
-                        style: const TextStyle(color: Colors.white, fontSize: 16, fontFamily: "zzFontFamily"),
-                        textAlign: TextAlign.start),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => {showDialogs()},
-                        child: Container(
-                          padding: EdgeInsets.all(15.w),
-                          margin: EdgeInsets.all(15.w),
-                          decoration: BoxDecoration(
-                            color: Colors.white30,
-                            borderRadius: BorderRadius.circular(5.r), // 圆角半径
+              SizedBox(height: 12.w),
+              Wrap(
+                spacing: 10.w,
+                runSpacing: 10.w,
+                children: List.generate(Constant.toneColour.length, (index) {
+                  String item = Constant.toneColour[index];
+                  bool selected = state.toneColourIndex == index;
+                  return InkWell(
+                    onTap: () {
+                      logic.selectTone(index);
+                    },
+                    child: Container(
+                      width: 80.w,
+                      height: 80.w,
+                      decoration: BoxDecoration(
+                        color: selected ? Colors.amber : Colors.white10,
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: Center(
+                        child: Text(
+                          item,
+                          style: TextStyle(
+                            color: selected ? Colors.black : Colors.white,
+                            fontSize: 16.sp,
                           ),
-                          child: Text(S.of(context).suspendedTextTip,
-                              style: TextStyle(color: Colors.white, fontSize: 20.sp, fontFamily: "zzFontFamily"),
-                              textAlign: TextAlign.start),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  );
+                }),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
-                child: Row(
-                  children: [
-                    Text(S.of(context).timbre,
-                        style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: "zzFontFamily"),
-                        textAlign: TextAlign.start),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SizedBox(
-                    height: 150.0,
-                    child: GridView(
-                      padding: const EdgeInsets.symmetric(vertical: 0),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 6,
-                      ),
-                      children: Constant.toneColour
-                          .map((item) => InkWell(
-                                borderRadius: const BorderRadius.all(Radius.circular(50)),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  margin: const EdgeInsets.all(8),
-                                  transformAlignment: Alignment.center,
-                                  decoration: Constant.toneColour.indexOf(item) == state.toneColourIndex
-                                      ? const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.amber,
-                                        )
-                                      : const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color(0xff424042),
-                                        ),
-                                  child: Text(
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    logic.getToneColour(item),
-                                  ),
-                                ),
-                                onTap: () {
-                                  state.toneColourIndex = Constant.toneColour.indexOf(item);
-                                  Application.getStorage.write(Constant.toneColourKey, item);
-                                  EventBus.getDefault().post(Constant.toneColourKey);
-                                  logic.update();
-                                },
-                              ))
-                          .toList(),
-                    )),
-              ),
+              SizedBox(height: 30.w),
 
-              // ========== 新增：背景BGM选择区域 ==========
-              Padding(
-                padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
-                child: Row(
-                  children: [
-                    Text("背景配乐",
-                        style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: "zzFontFamily"),
-                        textAlign: TextAlign.start),
-                  ],
-                ),
+              // ===== 背景BGM选择 =====
+              Text(
+                "背景配乐",
+                style: TextStyle(color: Colors.white, fontSize: 18.sp),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SizedBox(
-                    height: 150.0,
-                    child: GridView(
-                      padding: const EdgeInsets.symmetric(vertical: 0),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 6,
+              SizedBox(height: 12.w),
+              Wrap(
+                spacing: 10.w,
+                runSpacing: 10.w,
+                children: List.generate(Constant.bgMusicList.length, (index) {
+                  String item = Constant.bgMusicList[index];
+                  bool selected = state.bgMusicIndex == index;
+                  return InkWell(
+                    onTap: () {
+                      logic.selectBgMusic(index);
+                    },
+                    child: Container(
+                      width: 80.w,
+                      height: 80.w,
+                      decoration: BoxDecoration(
+                        color: selected ? Colors.amber : Colors.white10,
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
-                      children: Constant.bgMusicList
-                          .map((item) => InkWell(
-                                borderRadius: const BorderRadius.all(Radius.circular(50)),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  margin: const EdgeInsets.all(8),
-                                  transformAlignment: Alignment.center,
-                                  decoration: Constant.bgMusicList.indexOf(item) == state.bgMusicIndex
-                                      ? const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.amber,
-                                        )
-                                      : const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color(0xff424042),
-                                        ),
-                                  child: Text(
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    logic.getBgMusicName(item),
-                                  ),
-                                ),
-                                onTap: () {
-                                  state.bgMusicIndex = Constant.bgMusicList.indexOf(item);
-                                  Application.getStorage.write(Constant.bgSoundKey, item);
-                                  EventBus.getDefault().post(Constant.bgSoundKey);
-                                  logic.update();
-                                },
-                              ))
-                          .toList(),
-                    )),
+                      child: Center(
+                        child: Text(
+                          item,
+                          style: TextStyle(
+                            color: selected ? Colors.black : Colors.white,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
               ),
-              // ========== 背景配乐区域结束 ==========
+              SizedBox(height: 30.w),
 
-              Padding(
-                padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
-                child: Row(
-                  children: [
-                    Text(S.of(context).tapInterval(state.sliderValue.toStringAsFixed(1).toString()),
-                        style: const TextStyle(color: Colors.white, fontSize: 16, fontFamily: "zzFontFamily"),
-                        textAlign: TextAlign.start),
-                  ],
+              // ===== 自定义功德文字 =====
+              Text(
+                "自定义功德文字",
+                style: TextStyle(color: Colors.white, fontSize: 18.sp),
+              ),
+              SizedBox(height: 12.w),
+              TextField(
+                controller: state.textEditingController,
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                  hintText: "不填则使用默认文字",
+                  hintStyle: TextStyle(color: Colors.white54),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white38),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.amber),
+                  ),
                 ),
+                onChanged: (value) {
+                  logic.saveSuspendedText(value);
+                },
+              ),
+              SizedBox(height: 30.w),
+
+              // ===== 自动敲击 =====
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "自动敲击",
+                    style: TextStyle(color: Colors.white, fontSize: 18.sp),
+                  ),
+                  Switch(
+                    value: state.switchAutoValue,
+                    onChanged: (bool val) {
+                      logic.onAutoKnockChange(val);
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.w),
+              Text(
+                "敲击间隔：${state.intervalTime} 秒",
+                style: TextStyle(color: Colors.white70, fontSize: 14.sp),
               ),
               Slider(
-                activeColor: Colors.white,
-                inactiveColor: Colors.white38,
-                max: 3,
                 min: 1,
-                value: state.sliderValue,
-                onChanged: (value) {
-                  state.sliderValue = value;
-                  Application.getStorage.write(Constant.intervalTimeKey, value);
-                  EventBus.getDefault().post(Constant.intervalTimeKey);
-                  logic.update();
-                },
-              )
-            ],
-          );
-        }));
-  }
-
-  showDialogs() {
-    state.textEditingController.text = state.suspendedText;
-    showDialog(
-        context: Get.context!,
-        builder: (BuildContext context) {
-          return AlertDialog.adaptive(
-            title: Text(S.of(context).suspendedText),
-            content: TextField(
-              controller: state.textEditingController,
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text(S.of(context).cancel),
-                onPressed: () => {Navigator.of(context).pop()},
-              ),
-              TextButton(
-                child: Text(S.of(context).agree),
-                onPressed: () {
-                  logic.setSuspended();
+                max: 10,
+                value: state.intervalTime,
+                onChanged: (double val) {
+                  logic.onIntervalChange(val);
                 },
               ),
             ],
-          );
-        });
+          ),
+        );
+      }),
+    );
   }
 }
