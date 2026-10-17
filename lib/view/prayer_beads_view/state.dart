@@ -2,12 +2,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/constant.dart';
-import '../../widgets/snowflake_painter.dart';
 
 class PrayerBeadsViewState {
-  final List<SnowSlake> snowflakes = List.generate(50, (index) => SnowSlake());
-  // late String toneColour = Constant.toneColour.elementAt(0); // 冗余废弃，改用 selectedKnockIndex
-  bool snowflakeValue = true;
   bool muicKnock = false;
   bool isVibrate = true;
 
