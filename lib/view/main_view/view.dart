@@ -12,24 +12,24 @@ class MainViewPage extends StatelessWidget {
   final logic = Get.put(MainViewLogic());
   final state = Get.find<MainViewLogic>().state;
 
-@override
-Widget build(BuildContext context) {
-  return GetBuilder<MainViewLogic>(builder: (logics) {
-    return Stack(
-      alignment: AlignmentDirectional.center,
-      clipBehavior: Clip.none,
-      fit: StackFit.expand,
-      children: [
-        widgetTopFu(),
-        widgetMuYu(),
-        widgetGongde(),
-        widgetGongDeNumber(),
-        leftTopMenu(),
-        widgetProgss(),
-      ],
-    );
-  });
-}
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<MainViewLogic>(builder: (logics) {
+      return Stack(
+        alignment: AlignmentDirectional.center,
+        clipBehavior: Clip.none,
+        fit: StackFit.expand,
+        children: [
+          widgetTopFu(),
+          widgetMuYu(),
+          widgetGongde(),
+          widgetGongDeNumber(),
+          leftTopMenu(),
+          widgetProgss(),
+        ],
+      );
+    });
+  }
 
   widgetGongDeNumber() {
     return Positioned(
@@ -195,7 +195,6 @@ Widget build(BuildContext context) {
             ],
           )
               .animate(
-                  // onPlay: (controller) => controller.repeat(),
                   controller: logic.jiFuController)
               .effect(duration: 3000.ms)
               .effect(delay: 750.ms, duration: 1500.ms)
