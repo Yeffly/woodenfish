@@ -9,7 +9,7 @@ import 'state.dart';
 class SettingViewLogic extends GetxController {
   final SettingViewState state = SettingViewState();
 
-  // 新增：自动敲击定时器
+  // 自动敲击定时器
   Timer? autoTimer;
 
   @override
@@ -37,7 +37,7 @@ class SettingViewLogic extends GetxController {
     state.bgMusicIndex = Constant.bgMusicList.indexOf(bgStr);
     if(state.bgMusicIndex == -1) state.bgMusicIndex = 0;
 
-    // 自动敲击
+    // 自动敲击开关、敲击间隔
     state.switchAutoValue = Application.getStorage.read(Constant.autoKnockKey) ?? false;
     state.intervalTime = Application.getStorage.read(Constant.intervalTimeKey) ?? 1.0;
 
@@ -45,7 +45,7 @@ class SettingViewLogic extends GetxController {
     String suspended = Application.getStorage.read(Constant.suspendedKey) ?? "";
     state.textEditingController.text = suspended;
 
-    // 新增：读取配置后，如果自动敲击是开启状态，则启动定时器
+    // 读取配置完成后，如果自动敲击开启，启动定时器
     if(state.switchAutoValue){
       startAutoKnock();
     }
@@ -55,9 +55,10 @@ class SettingViewLogic extends GetxController {
 
   /// 启动自动敲击定时器
   void startAutoKnock() {
-    autoTimer?.cancel(); // 先销毁旧定时器，避免多个Timer同时运行
-    autoTimer = Timer.periodic(Duration(milliseconds: (state.intervalTime * 1000).toInt()), (_) {
-      // 发送事件，通知首页执行敲击动作（复用EventBus，不用引入其他logic）
+    autoTimer?.cancel(); // 先销毁旧定时器，防止多个Timer并行
+    final int ms = (state.intervalTime * 1000).round();
+    autoTimer = Timer.periodic(Duration(milliseconds: ms), (_) {
+      // EventBus发送事件，首页接收执行敲击
       EventBus.getDefault().post(Constant.autoKnockKey);
     });
   }
@@ -80,17 +81,18 @@ class SettingViewLogic extends GetxController {
     update();
   }
 
+  /// 保存自定义功德文字
   void saveSuspendedText(String text) {
     Application.getStorage.write(Constant.suspendedKey, text);
     EventBus.getDefault().post(Constant.suspendedKey);
   }
 
+  /// 自动敲击开关切换
   void onAutoKnockChange(bool value) {
     state.switchAutoValue = value;
     Application.getStorage.write(Constant.autoKnockKey, value);
     EventBus.getDefault().post(Constant.autoKnockKey);
 
-    // 开关变化，启动/关闭定时器
     if(value){
       startAutoKnock();
     }else{
@@ -100,13 +102,12 @@ class SettingViewLogic extends GetxController {
     update();
   }
 
-  /// 【修改】滑块松手之后才调用这个方法，保存并重启定时器
+  /// 滑块松手回调：更新敲击间隔，保存本地，重启定时器
   void onIntervalChange(double value) {
     state.intervalTime = value;
     Application.getStorage.write(Constant.intervalTimeKey, value);
     EventBus.getDefault().post(Constant.intervalTimeKey);
 
-    // 如果自动敲击正在开启，立刻重启定时器，应用新间隔
     if(state.switchAutoValue){
       startAutoKnock();
     }
