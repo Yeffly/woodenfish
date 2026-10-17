@@ -51,6 +51,7 @@ flutter:
     - assets/
     - assets/mgc.txt
     - assets/images/
+    - assets/sound/
 
 flutter_intl:
   enabled: true
